@@ -82,6 +82,7 @@ struct MainView: View {
             }
         }
     }
+    
 }
 
 private let itemFormatter: DateFormatter = {
