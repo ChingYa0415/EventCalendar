@@ -53,7 +53,6 @@
 				24F4218D2A67CF0300A4935A /* Main */,
 				24660B6C2A6AAAD00046EFEB /* EventCalendar */,
 				24660B6D2A6AAAE50046EFEB /* Calendar */,
-				24660B6E2A6AAAEE0046EFEB /* Event */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -72,13 +71,6 @@
 				24660B712A6AAB6A0046EFEB /* CalendarView.swift */,
 			);
 			path = Calendar;
-			sourceTree = "<group>";
-		};
-		24660B6E2A6AAAEE0046EFEB /* Event */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Event;
 			sourceTree = "<group>";
 		};
 		24F4216E2A67C19800A4935A = {
