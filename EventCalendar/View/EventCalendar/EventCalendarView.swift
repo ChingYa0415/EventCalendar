@@ -17,6 +17,12 @@ struct EventCalendarView: View {
     
 }
 
-#Preview {
-    EventCalendarView()
+// MARK: - Preview
+
+struct EventCalendarView_Previews: PreviewProvider {
+    
+    static var previews: some View {
+        EventCalendarView()
+    }
+    
 }

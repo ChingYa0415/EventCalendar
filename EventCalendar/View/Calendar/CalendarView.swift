@@ -42,6 +42,7 @@ struct CalendarView: View {
                 } label: {
                     Image(systemName: "chevron.left")
                         .font(.title2)
+                        .foregroundColor(.green)
                 }
                 
                 Button {
@@ -51,6 +52,7 @@ struct CalendarView: View {
                 } label: {
                     Image(systemName: "chevron.right")
                         .font(.title2)
+                        .foregroundColor(.green)
                 }
             }
             .padding()
@@ -96,7 +98,7 @@ struct CalendarView: View {
             }
         }
         .padding()
-        .onChange(of: m_iCurrentMonth) { oldValue, newValue in
+        .onChange(of: m_iCurrentMonth) { newValue in
             m_dateCurrentDate = getCurrentMonth()
         }
     }
@@ -167,6 +169,10 @@ extension Date {
 
 // MARK: - Preview
 
-#Preview {
-    CalendarView(m_dateCurrentDate: Date())
+struct CalendarView_Previews: PreviewProvider {
+    
+    static var previews: some View {
+        CalendarView(m_dateCurrentDate: Date())
+    }
+    
 }

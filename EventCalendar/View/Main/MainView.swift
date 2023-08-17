@@ -13,11 +13,11 @@ struct MainView: View {
     // MARK: - Property Wrapper
     
     @Environment(\.managedObjectContext) private var viewContext
-    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)], animation: .default)
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \EventContent.date, ascending: true)], animation: .default)
     
     // MARK: - Property
     
-    private var items: FetchedResults<Item>
+    private var items: FetchedResults<EventContent>
 
     // MARK: - Body
     
@@ -26,15 +26,25 @@ struct MainView: View {
             List {
                 ForEach(items) { item in
                     NavigationLink {
-                        Text("Item at \(item.timestamp!, formatter: itemFormatter)")
+                        Text("Item at \(item.date!, formatter: itemFormatter)")
                     } label: {
                         Image(systemName: "calendar")
                             .imageScale(.large)
                             .padding()
                             .background(.yellow)
-                            .clipShape(.circle)
+                            .clipShape(Circle())
                         
-                        Text(item.timestamp!, formatter: itemFormatter)
+                        Text(item.date!, formatter: itemFormatter)
+                            .bold()
+                            .padding(.leading, 20)
+                            .foregroundStyle(.red)
+                        
+                        Text("\(item.title!)")
+                            .bold()
+                            .padding(.leading, 20)
+                            .foregroundStyle(.red)
+                        
+                        Text("\(item.content!)")
                             .bold()
                             .padding(.leading, 20)
                             .foregroundStyle(.red)
@@ -43,6 +53,17 @@ struct MainView: View {
                 .onDelete(perform: deleteItems)
             }
             .navigationTitle(Text("事件"))
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+
+                    } label: {
+                        Image(systemName: "plus")
+                            .foregroundColor(.green)
+                    }
+
+                }
+            }
             
             Text("空的")
         }
@@ -52,8 +73,8 @@ struct MainView: View {
 
     private func addItem() {
         withAnimation {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
+            let newItem = EventContent(context: viewContext)
+            newItem.date = Date()
 
             do {
                 try viewContext.save()
@@ -95,6 +116,10 @@ private let itemFormatter: DateFormatter = {
 
 // MARK: - Preview
 
-#Preview {
-    MainView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+struct MainView_Previews: PreviewProvider {
+    
+    static var previews: some View {
+        MainView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+    }
+    
 }
