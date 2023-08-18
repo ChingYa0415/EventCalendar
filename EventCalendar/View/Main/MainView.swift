@@ -13,20 +13,20 @@ struct MainView: View {
     // MARK: - Property Wrapper
     
     @Environment(\.managedObjectContext) private var viewContext
-    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \EventContent.date, ascending: true)], animation: .default)
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Event.startDate, ascending: true)], animation: .default)
     
     // MARK: - Property
     
-    private var items: FetchedResults<EventContent>
+    private var events: FetchedResults<Event>
 
     // MARK: - Body
     
     var body: some View {
         NavigationView {
             List {
-                ForEach(items) { item in
+                ForEach(events) { event in
                     NavigationLink {
-                        Text("Item at \(item.date!, formatter: itemFormatter)")
+                        Text("Item at \(event.startDate!, formatter: itemFormatter)")
                     } label: {
                         Image(systemName: "calendar")
                             .imageScale(.large)
@@ -34,17 +34,17 @@ struct MainView: View {
                             .background(.yellow)
                             .clipShape(Circle())
                         
-                        Text(item.date!, formatter: itemFormatter)
+                        Text(event.startDate!, formatter: itemFormatter)
                             .bold()
                             .padding(.leading, 20)
                             .foregroundStyle(.red)
                         
-                        Text("\(item.title!)")
+                        Text("\(event.title!)")
                             .bold()
                             .padding(.leading, 20)
                             .foregroundStyle(.red)
                         
-                        Text("\(item.content!)")
+                        Text("\(event.content!)")
                             .bold()
                             .padding(.leading, 20)
                             .foregroundStyle(.red)
@@ -73,8 +73,8 @@ struct MainView: View {
 
     private func addItem() {
         withAnimation {
-            let newItem = EventContent(context: viewContext)
-            newItem.date = Date()
+            let newEvent = Event(context: viewContext)
+            newEvent.startDate = Date()
 
             do {
                 try viewContext.save()
@@ -90,7 +90,7 @@ struct MainView: View {
 
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
-            offsets.map { items[$0] }.forEach(viewContext.delete)
+            offsets.map { events[$0] }.forEach(viewContext.delete)
 
             do {
                 try viewContext.save()

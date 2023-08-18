@@ -15,14 +15,10 @@ struct PersistenceController {
         let viewContext = result.container.viewContext
         
         for i in 0..<5 {
-            let newItem = EventContent(context: viewContext)
-            newItem.date = Date()
-            newItem.title = "測試主題"
-            newItem.content = "測試內容"
-            
-            if let imageUrl = Bundle.main.url(forResource: "玫瑰花", withExtension: "jpg") {
-                newItem.image = try? Data(contentsOf: imageUrl)
-            }
+            let event = Event(context: viewContext)
+            event.startDate = Date()
+            event.title = "測試主題"
+            event.content = "測試內容"
         }
         
         do {
