@@ -13,85 +13,131 @@ struct MainView: View {
     // MARK: - Property Wrapper
     
     @Environment(\.managedObjectContext) private var viewContext
-    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Event.startDate, ascending: true)], animation: .default)
+    @State var m_bIsNewEventPresented: Bool
+    @State var m_bIsAlertPresented: Bool
     
     // MARK: - Property
     
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Event.startDate, ascending: true)])
     private var events: FetchedResults<Event>
-
+    let itemFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy/MM/dd"
+        
+        return dateFormatter
+    }()
+    
     // MARK: - Body
     
     var body: some View {
         NavigationView {
-            List {
-                ForEach(events) { event in
-                    NavigationLink {
-                        Text("Item at \(event.startDate!, formatter: itemFormatter)")
-                    } label: {
-                        Image(systemName: "calendar")
-                            .imageScale(.large)
-                            .padding()
-                            .background(.yellow)
-                            .clipShape(Circle())
+            if events.isEmpty {
+                Text("空的")
+                    .navigationTitle(Text("事件"))
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button {
+                                m_bIsNewEventPresented.toggle()
+                            } label: {
+                                Image(systemName: "plus")
+                                    .foregroundColor(.green)
+                            }
+                        }
+                    }
+                    .sheet(isPresented: $m_bIsNewEventPresented) {
+                        NewEventView()
+                    }
+            } else {
+                List {
+                    ForEach(events) { event in
+                        NavigationLink {
+                            Text("Item at \(event.startDate!, formatter: itemFormatter)")
+                        } label: {
+                            Image(systemName: "calendar")
+                                .imageScale(.large)
+                                .padding()
+                                .background(.pink)
+                                .clipShape(Circle())
+                            
+                            Text(event.startDate!, formatter: itemFormatter)
+                                .padding(.leading, 20)
+                                .foregroundStyle(.green)
+                                .font(.subheadline)
+                            
+                            Text("\(event.title!)")
+                                .bold()
+                                .padding(.leading, 20)
+                                .foregroundStyle(.green)
+                                .font(.subheadline)
+                                .lineLimit(2)
+                        }
+                    }
+                    .onDelete(perform: deleteItems)
+                }
+                .navigationTitle(Text("事件"))
+                .toolbar {
+                    ToolbarItemGroup(placement: .topBarTrailing) {
+                        if !events.isEmpty {
+                            Button {
+                                m_bIsAlertPresented = true
+                            } label: {
+                                Text("全部刪除")
+                                    .underline()
+                                    .foregroundStyle(.red)
+                            }
+                        }
                         
-                        Text(event.startDate!, formatter: itemFormatter)
-                            .bold()
-                            .padding(.leading, 20)
-                            .foregroundStyle(.red)
+                        Spacer()
                         
-                        Text("\(event.title!)")
-                            .bold()
-                            .padding(.leading, 20)
-                            .foregroundStyle(.red)
+                        Button {
+                            m_bIsNewEventPresented.toggle()
+                        } label: {
+                            Image(systemName: "plus")
+                                .foregroundColor(.green)
+                        }
                         
-                        Text("\(event.content!)")
-                            .bold()
-                            .padding(.leading, 20)
-                            .foregroundStyle(.red)
                     }
                 }
-                .onDelete(perform: deleteItems)
-            }
-            .navigationTitle(Text("事件"))
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                .sheet(isPresented: $m_bIsNewEventPresented) {
+                    NewEventView()
+                }
+                .alert("全部刪除", isPresented: $m_bIsAlertPresented) {
                     Button {
-
+                        m_bIsAlertPresented = false
                     } label: {
-                        Image(systemName: "plus")
-                            .foregroundColor(.green)
+                        // MARK: TODO: 更改文字顏色
+                        Text("取消")
                     }
-
+                    
+                    Button {
+                        withAnimation {
+                            do {
+                                for event in events {
+                                    viewContext.delete(event)
+                                }
+                                
+                                try viewContext.save()
+                            } catch {
+                                print("刪除全部資料錯誤：", error)
+                            }
+                        }
+                    } label: {
+                        // MARK: TODO: 更改文字顏色
+                        Text("好")
+                    }
+                } message: {
+                    Text("確定要刪除全部資料嗎？")
                 }
             }
-            
-            Text("空的")
         }
     }
     
     // MARK: - Method
-
-    private func addItem() {
-        withAnimation {
-            let newEvent = Event(context: viewContext)
-            newEvent.startDate = Date()
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
-        }
-    }
-
+    
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
             offsets.map { events[$0] }.forEach(viewContext.delete)
-
+            
             do {
                 try viewContext.save()
             } catch {
@@ -106,20 +152,12 @@ struct MainView: View {
     
 }
 
-private let itemFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .short
-    formatter.timeStyle = .medium
-    
-    return formatter
-}()
-
 // MARK: - Preview
 
 struct MainView_Previews: PreviewProvider {
     
     static var previews: some View {
-        MainView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        MainView(m_bIsNewEventPresented: false, m_bIsAlertPresented: false).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
     
 }

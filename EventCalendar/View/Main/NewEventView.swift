@@ -11,17 +11,15 @@ struct NewEventView: View {
     
     // MARK: - Property Wrapper
     
+    @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) var dismiss
-    @State var m_strTitle: String
-    @State var m_bIsAllDay: Bool
-    @State var m_dateStart: Date
-    @State var m_dateEnd: Date
-    @State var m_strContent: String
-    
-    // MARK: - Property
-    
-    let calendar = Calendar.current
-//    let calendar.date(byAdding: .day, value: day, to: Date())!
+    @FocusState var m_bIsEditing: Bool
+    @State var m_strTitle: String = ""
+    @State var m_bIsAllDay: Bool = false
+    @State var m_dateStart: Date = Date()
+    @State var m_dateEnd: Date = Date(timeInterval: 3600, since: Date())
+    @State var m_strContent: String = ""
+    @State var m_bIsAlertPresented: Bool = false
     
     // MARK: - Body
     
@@ -30,6 +28,7 @@ struct NewEventView: View {
             List {
                 Section {
                     TextField("標題", text: $m_strTitle)
+                        .focused($m_bIsEditing)
                 }
                 
                 Section {
@@ -47,8 +46,9 @@ struct NewEventView: View {
                 }
                 
                 Section {
-                    TextField("註解", text: $m_strContent)
-                        .frame(height: 100, alignment: .topLeading)
+                    TextEditor(text: $m_strContent)
+                        .frame(width: 300, alignment: .topLeading)
+                        .focused($m_bIsEditing)
                 }
             }
             .listStyle(.insetGrouped)
@@ -67,13 +67,69 @@ struct NewEventView: View {
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                        
+                        if m_dateStart.compare(m_dateEnd) == .orderedDescending {
+                            m_bIsAlertPresented = true
+                        } else {
+                            addItem()
+                        }
                     } label: {
                         Text("新增")
                             .underline(true, color: .green)
                             .foregroundColor(.green)
                     }
                 }
+                
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    
+                    Button {
+                        m_bIsEditing = false
+                    } label: {
+                        Text("確定")
+                            .foregroundStyle(.green)
+                    }
+                }
+            }
+            .alert("新增失敗", isPresented: $m_bIsAlertPresented) {
+                Button {
+                    m_bIsAlertPresented = false
+                } label: {
+                    // MARK: TODO: 更改文字顏色
+                    Text("好")
+                }
+                .tint(.green)
+            } message: {
+                Text("開始日期必須早於結束日期")
+            }
+        }
+    }
+    
+    // MARK: - Method
+    
+    private func addItem() {
+        withAnimation {
+            let event = Event(context: viewContext)
+            event.id = UUID()
+            
+            if m_strTitle == "" {
+                m_strTitle = "新增事件"
+            }
+            
+            event.title = m_strTitle
+            event.startDate = m_dateStart
+            event.endDate = m_dateEnd
+            event.content = m_strContent
+            
+            do {
+                try viewContext.save()
+                
+                dismiss()
+            } catch {
+                // Replace this implementation with code to handle the error appropriately.
+                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                let nsError = error as NSError
+                
+                fatalError("新增錯誤\(nsError), \(nsError.userInfo)")
             }
         }
     }

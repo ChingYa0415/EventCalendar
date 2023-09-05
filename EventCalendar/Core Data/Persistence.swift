@@ -14,12 +14,12 @@ struct PersistenceController {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
         
-        for i in 0..<5 {
-            let event = Event(context: viewContext)
-            event.startDate = Date()
-            event.title = "測試主題"
-            event.content = "測試內容"
-        }
+        let event = Event(context: viewContext)
+        event.id = UUID()
+        event.title = "測試主題"
+        event.startDate = Date()
+        event.endDate = Date(timeInterval: 3600, since: Date())
+        event.content = "測試內容"
         
         do {
             try viewContext.save()

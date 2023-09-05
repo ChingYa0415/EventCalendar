@@ -13,7 +13,7 @@ struct EventCalendarApp: App {
 
     var body: some Scene {
         WindowGroup {
-            MainView()
+            MainView(m_bIsNewEventPresented: false, m_bIsAlertPresented: false)
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }
