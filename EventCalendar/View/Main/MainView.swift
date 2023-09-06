@@ -19,7 +19,7 @@ struct MainView: View {
     // MARK: - Property
     
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Event.startDate, ascending: true)])
-    private var events: FetchedResults<Event>
+    private var m_events: FetchedResults<Event>
     let itemFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy/MM/dd"
@@ -31,7 +31,7 @@ struct MainView: View {
     
     var body: some View {
         NavigationView {
-            if events.isEmpty {
+            if m_events.isEmpty {
                 Text("空的")
                     .navigationTitle(Text("事件"))
                     .toolbar {
@@ -49,9 +49,9 @@ struct MainView: View {
                     }
             } else {
                 List {
-                    ForEach(events) { event in
+                    ForEach(m_events) { event in
                         NavigationLink {
-                            Text("Item at \(event.startDate!, formatter: itemFormatter)")
+                            EventCalendarView(m_event: event)
                         } label: {
                             Image(systemName: "calendar")
                                 .imageScale(.large)
@@ -77,7 +77,7 @@ struct MainView: View {
                 .navigationTitle(Text("事件"))
                 .toolbar {
                     ToolbarItemGroup(placement: .topBarTrailing) {
-                        if !events.isEmpty {
+                        if !m_events.isEmpty {
                             Button {
                                 m_bIsAlertPresented = true
                             } label: {
@@ -95,7 +95,6 @@ struct MainView: View {
                             Image(systemName: "plus")
                                 .foregroundColor(.green)
                         }
-                        
                     }
                 }
                 .sheet(isPresented: $m_bIsNewEventPresented) {
@@ -112,7 +111,7 @@ struct MainView: View {
                     Button {
                         withAnimation {
                             do {
-                                for event in events {
+                                for event in m_events {
                                     viewContext.delete(event)
                                 }
                                 
@@ -136,7 +135,7 @@ struct MainView: View {
     
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
-            offsets.map { events[$0] }.forEach(viewContext.delete)
+            offsets.map { m_events[$0] }.forEach(viewContext.delete)
             
             do {
                 try viewContext.save()
@@ -157,7 +156,8 @@ struct MainView: View {
 struct MainView_Previews: PreviewProvider {
     
     static var previews: some View {
-        MainView(m_bIsNewEventPresented: false, m_bIsAlertPresented: false).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        MainView(m_bIsNewEventPresented: false, m_bIsAlertPresented: false)
+            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
     
 }

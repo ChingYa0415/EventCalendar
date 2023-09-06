@@ -9,6 +9,7 @@ import SwiftUI
 
 @main
 struct EventCalendarApp: App {
+    
     let persistenceController = PersistenceController.shared
 
     var body: some Scene {
@@ -17,4 +18,5 @@ struct EventCalendarApp: App {
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }
+    
 }

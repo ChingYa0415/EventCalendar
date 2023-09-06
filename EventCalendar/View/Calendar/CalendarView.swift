@@ -44,6 +44,7 @@ struct CalendarView: View {
                         .font(.title2)
                         .foregroundColor(.green)
                 }
+                .tint(.clear)
                 
                 Button {
                     withAnimation {
@@ -54,6 +55,7 @@ struct CalendarView: View {
                         .font(.title2)
                         .foregroundColor(.green)
                 }
+                .tint(.clear)
             }
             .padding()
             
@@ -81,7 +83,7 @@ struct CalendarView: View {
                         Spacer()
                         
                         Circle()
-                            .foregroundStyle(.pink)
+                            .foregroundStyle(isSameDay(dateValue: value, currentDate: m_dateCurrentDate) ? .green : .clear)
                             .frame(width: 8, height: 8)
                     }
                     .frame(maxWidth: .infinity)
@@ -101,6 +103,7 @@ struct CalendarView: View {
         .onChange(of: m_iCurrentMonth) { newValue in
             m_dateCurrentDate = getCurrentMonth()
         }
+        .animation(nil)
     }
     
     // MARK: - Method

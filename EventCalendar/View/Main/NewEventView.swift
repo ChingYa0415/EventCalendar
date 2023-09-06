@@ -15,6 +15,7 @@ struct NewEventView: View {
     @Environment(\.dismiss) var dismiss
     @FocusState var m_bIsEditing: Bool
     @State var m_strTitle: String = ""
+    @State var m_bHasEndDay: Bool = false
     @State var m_bIsAllDay: Bool = false
     @State var m_dateStart: Date = Date()
     @State var m_dateEnd: Date = Date(timeInterval: 3600, since: Date())
@@ -32,27 +33,42 @@ struct NewEventView: View {
                 }
                 
                 Section {
+                    Toggle("結束日", isOn: $m_bHasEndDay)
+                    
                     Toggle("整日", isOn: $m_bIsAllDay)
                     
                     if m_bIsAllDay {
                         DatePicker("開始", selection: $m_dateStart, displayedComponents: .date)
                         
-                        DatePicker("結束", selection: $m_dateEnd, displayedComponents: .date)
+                        if m_bHasEndDay {
+                            DatePicker("結束", selection: $m_dateEnd, displayedComponents: .date)
+                        }
                     } else {
                         DatePicker("開始", selection: $m_dateStart)
                         
-                        DatePicker("結束", selection: $m_dateEnd)
+                        if m_bHasEndDay {
+                            DatePicker("結束", selection: $m_dateEnd)
+                        }
                     }
                 }
                 
                 Section {
-                    TextEditor(text: $m_strContent)
-                        .frame(width: 300, alignment: .topLeading)
-                        .focused($m_bIsEditing)
+                    ZStack {
+                        if m_strContent.isEmpty && !m_bIsEditing {
+                            Text("備註")
+                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                                .foregroundStyle(.gray)
+                                .padding(.vertical, 10)
+                        }
+                        
+                        TextEditor(text: $m_strContent)
+                            .frame(minHeight: 200, maxHeight: .infinity, alignment: .topLeading)
+                            .focused($m_bIsEditing)
+                    }
                 }
             }
             .listStyle(.insetGrouped)
-            .navigationTitle("新增行程")
+            .navigationTitle("新增事件")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -67,7 +83,7 @@ struct NewEventView: View {
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                        if m_dateStart.compare(m_dateEnd) == .orderedDescending {
+                        if m_dateStart.compare(m_dateEnd) == .orderedDescending && m_bHasEndDay  {
                             m_bIsAlertPresented = true
                         } else {
                             addItem()
@@ -117,7 +133,7 @@ struct NewEventView: View {
             
             event.title = m_strTitle
             event.startDate = m_dateStart
-            event.endDate = m_dateEnd
+            event.endDate = m_bHasEndDay ? m_dateEnd : nil
             event.content = m_strContent
             
             do {
@@ -145,5 +161,3 @@ struct NewEventView_Previews: PreviewProvider {
     }
     
 }
-
-
