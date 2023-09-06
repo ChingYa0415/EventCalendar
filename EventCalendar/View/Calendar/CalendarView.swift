@@ -11,6 +11,7 @@ struct CalendarView: View {
     
     // MARK: - Property Wrapper
     
+    @State var m_dateStartDate: Date
     @State var m_dateCurrentDate: Date
     @State var m_iCurrentMonth: Int = 0
     
@@ -36,9 +37,7 @@ struct CalendarView: View {
                 Spacer(minLength: 0)
                 
                 Button {
-                    withAnimation {
-                        m_iCurrentMonth -= 1
-                    }
+                    m_iCurrentMonth -= 1
                 } label: {
                     Image(systemName: "chevron.left")
                         .font(.title2)
@@ -47,9 +46,7 @@ struct CalendarView: View {
                 .tint(.clear)
                 
                 Button {
-                    withAnimation {
-                        m_iCurrentMonth += 1
-                    }
+                    m_iCurrentMonth += 1
                 } label: {
                     Image(systemName: "chevron.right")
                         .font(.title2)
@@ -88,10 +85,22 @@ struct CalendarView: View {
                     }
                     .frame(maxWidth: .infinity)
                     .background {
-                        Capsule()
-                            .foregroundStyle(.pink)
-                            .padding(.horizontal, 8)
-                            .opacity(isSameDay(dateValue: value, currentDate: m_dateCurrentDate) ? 1 : 0)
+                        if Calendar.current.dateComponents([.year, .month, .day], from: m_dateStartDate) == Calendar.current.dateComponents([.year, .month, .day], from: m_dateCurrentDate) {
+                            Capsule()
+                                .foregroundStyle(LinearGradient(colors: [.green, .pink], startPoint: .top, endPoint: .bottom))
+                                .padding(.horizontal, 8)
+                                .opacity(isSameDay(dateValue: value, currentDate: m_dateCurrentDate) ? 1 : 0)
+                        } else if isSameDay(dateValue: value, currentDate: m_dateStartDate) {
+                            Capsule()
+                                .foregroundStyle(.green)
+                                .padding(.horizontal, 8)
+                                .opacity(1)
+                        } else {
+                            Capsule()
+                                .foregroundStyle(.pink)
+                                .padding(.horizontal, 8)
+                                .opacity(isSameDay(dateValue: value, currentDate: m_dateCurrentDate) ? 1 : 0)
+                        }
                     }
                     .onTapGesture {
                         m_dateCurrentDate = value.date
@@ -175,7 +184,7 @@ extension Date {
 struct CalendarView_Previews: PreviewProvider {
     
     static var previews: some View {
-        CalendarView(m_dateCurrentDate: Date())
+        CalendarView(m_dateStartDate: Date(), m_dateCurrentDate: Date())
     }
     
 }

@@ -11,7 +11,6 @@ struct EventCalendarView: View {
     
     // MARK: - Property Wrapper
     
-    @Environment(\.managedObjectContext) private var viewContext
     @State var m_event: Event
     
     // MARK: - Property
@@ -32,7 +31,7 @@ struct EventCalendarView: View {
                 .frame(maxWidth: .infinity, idealHeight: 300, alignment: .leading)
                 .padding(.horizontal, 20)
                 
-                CalendarView(m_dateCurrentDate: m_event.startDate!)
+                CalendarView(m_dateStartDate: m_event.startDate!, m_dateCurrentDate: Date())
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         }
@@ -47,11 +46,8 @@ struct EventCalendarView: View {
 
 struct EventCalendarView_Previews: PreviewProvider {
     
-    @Environment(\.managedObjectContext) private var viewContext
-    
     static var previews: some View {
-        EventCalendarView(m_event: Event(context: PersistenceController.preview.container.viewContext))
-            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        EventCalendarView(m_event: (PersistenceController.testData?[0])!)
     }
     
 }

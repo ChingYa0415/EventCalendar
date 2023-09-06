@@ -63,4 +63,8 @@ struct PersistenceController {
         container.viewContext.automaticallyMergesChangesFromParent = true
     }
     
+    static var testData: [Event]? = {
+        return try? PersistenceController.preview.container.viewContext.fetch(NSFetchRequest<NSFetchRequestResult>(entityName: "Event")) as? [Event]
+    }()
+    
 }
