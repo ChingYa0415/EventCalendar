@@ -11,9 +11,9 @@ struct EventCalendarView: View {
     
     // MARK: - Property Wrapper
     
-    @State var m_event: Event
-    
-    // MARK: - Property
+    @Environment(\.managedObjectContext) private var viewContext
+    @ObservedObject var m_event: Event
+    @State var m_bIsNewEventPresented: Bool = false
     
     // MARK: - Body
     
@@ -31,13 +31,29 @@ struct EventCalendarView: View {
                 .frame(maxWidth: .infinity, idealHeight: 300, alignment: .leading)
                 .padding(.horizontal, 20)
                 
-                CalendarView(m_dateStartDate: m_event.startDate!, m_dateCurrentDate: Date())
+                CalendarView(m_dateStart: $m_event.startDate)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         }
         .navigationTitle("事件詳細資訊")
         .navigationBarTitleDisplayMode(.inline)
         .tint(.pink)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    m_bIsNewEventPresented = true
+                } label: {
+                    Text("編輯")
+                        .underline()
+                        .foregroundStyle(.green)
+                }
+            }
+        }
+        .sheet(isPresented: $m_bIsNewEventPresented) {
+            print(m_event.startDate!)
+        } content: {
+            NewEventView(m_uuidID: m_event.id, m_enumType: .Edit, m_strTitle: m_event.title!, m_bHasEndDay: m_event.endDate != nil ? true : false, m_dateStart: m_event.startDate!, m_dateEnd: m_event.endDate != nil ? m_event.endDate! : Date(timeInterval: 3600, since: m_event.startDate!), m_strContent: m_event.content!)
+        }
     }
     
 }

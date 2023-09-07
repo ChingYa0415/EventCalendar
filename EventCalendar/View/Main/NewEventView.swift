@@ -9,11 +9,20 @@ import SwiftUI
 
 struct NewEventView: View {
     
+    // MARK: - Enumeration
+    
+    enum NewType {
+        case Add
+        case Edit
+    }
+    
     // MARK: - Property Wrapper
     
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) var dismiss
     @FocusState var m_bIsEditing: Bool
+    @State var m_uuidID: UUID?
+    @State var m_enumType: NewType = .Add
     @State var m_strTitle: String = ""
     @State var m_bHasEndDay: Bool = false
     @State var m_bIsAllDay: Bool = false
@@ -68,7 +77,7 @@ struct NewEventView: View {
                 }
             }
             .listStyle(.insetGrouped)
-            .navigationTitle("新增事件")
+            .navigationTitle(m_enumType == .Add ? "新增事件" : "編輯事件")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -86,10 +95,14 @@ struct NewEventView: View {
                         if m_dateStart.compare(m_dateEnd) == .orderedDescending && m_bHasEndDay  {
                             m_bIsAlertPresented = true
                         } else {
-                            addItem()
+                            if m_enumType == .Add{
+                                addItem()
+                            } else if m_enumType == .Edit {
+                                editItem()
+                            }
                         }
                     } label: {
-                        Text("新增")
+                        Text(m_enumType == .Add ? "新增" : "確定")
                             .underline(true, color: .green)
                             .foregroundColor(.green)
                     }
@@ -146,6 +159,30 @@ struct NewEventView: View {
                 let nsError = error as NSError
                 
                 fatalError("新增錯誤\(nsError), \(nsError.userInfo)")
+            }
+        }
+    }
+    
+    func editItem() {
+        withAnimation {
+            let fetchRequest = Event.fetchRequest()
+            fetchRequest.predicate = NSPredicate(format: "id == %@", m_uuidID! as CVarArg)
+            
+            do {
+                if let eventToUpdate = try? viewContext.fetch(fetchRequest).first {
+                    eventToUpdate.title = m_strTitle
+                    eventToUpdate.endDate = m_dateEnd
+                    eventToUpdate.startDate = m_dateStart
+                    eventToUpdate.content = m_strContent
+                    
+                    try viewContext.save()
+                    
+                    dismiss()
+                }
+            } catch {
+                let nsError = error as NSError
+                
+                fatalError("編輯錯誤\(nsError), \(nsError.userInfo)")
             }
         }
     }

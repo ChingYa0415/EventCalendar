@@ -15,11 +15,11 @@ struct MainView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @State var m_bIsNewEventPresented: Bool
     @State var m_bIsAlertPresented: Bool
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Event.startDate, ascending: true)])
+    private var m_events: FetchedResults<Event>
     
     // MARK: - Property
     
-    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Event.startDate, ascending: true)])
-    private var m_events: FetchedResults<Event>
     let itemFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy/MM/dd"
