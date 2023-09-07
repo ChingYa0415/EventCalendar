@@ -12,7 +12,7 @@ struct CalendarView: View {
     // MARK: - Property Wrapper
     
     @Binding var m_dateStart: Date?
-    @State var m_dateCurrent: Date = Date()
+    @Binding var m_dateCurrent: Date
     @State var m_iCurrentMonth: Int = 0
     
     // MARK: - Property
@@ -184,7 +184,7 @@ extension Date {
 struct CalendarView_Previews: PreviewProvider {
     
     static var previews: some View {
-        CalendarView(m_dateStart: .constant(Date()))
+        CalendarView(m_dateStart: .constant(Date()), m_dateCurrent: .constant(Date()))
     }
     
 }

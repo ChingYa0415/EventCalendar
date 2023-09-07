@@ -7,7 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		183783D22AA9B0C800F16636 /* EventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 183783D12AA9B0C800F16636 /* EventView.swift */; };
 		1857E46A2A820E6D00B65B1E /* DateValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1857E4692A820E6D00B65B1E /* DateValue.swift */; };
+		18C3D8F82AA9CEB6006C0BDD /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C3D8F72AA9CEB6006C0BDD /* ImagePicker.swift */; };
+		18C3D8F92AA9D26E006C0BDD /* EventContent+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D3499D2A8E43C9001FAECC /* EventContent+CoreDataProperties.swift */; };
+		18C3D8FA2AA9D26E006C0BDD /* Event+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F0B5FA2A8F439E009D854B /* Event+CoreDataClass.swift */; };
+		18C3D8FB2AA9D26E006C0BDD /* Event+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F0B5FB2A8F439E009D854B /* Event+CoreDataProperties.swift */; };
+		18C3D8FC2AA9D26E006C0BDD /* EventContent+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D3499C2A8E43C9001FAECC /* EventContent+CoreDataClass.swift */; };
 		18F0B5F92A8F282D009D854B /* NewEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F0B5F82A8F282D009D854B /* NewEventView.swift */; };
 		24660B702A6AAB150046EFEB /* EventCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24660B6F2A6AAB150046EFEB /* EventCalendarView.swift */; };
 		24660B722A6AAB6A0046EFEB /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24660B712A6AAB6A0046EFEB /* CalendarView.swift */; };
@@ -20,7 +26,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		183783D12AA9B0C800F16636 /* EventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventView.swift; sourceTree = "<group>"; };
 		1857E4692A820E6D00B65B1E /* DateValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateValue.swift; sourceTree = "<group>"; };
+		18C3D8F72AA9CEB6006C0BDD /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		18D3499C2A8E43C9001FAECC /* EventContent+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EventContent+CoreDataClass.swift"; sourceTree = "<group>"; };
 		18D3499D2A8E43C9001FAECC /* EventContent+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EventContent+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		18F0B5F82A8F282D009D854B /* NewEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEventView.swift; sourceTree = "<group>"; };
@@ -48,6 +56,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		183783D02AA9B0B500F16636 /* Event */ = {
+			isa = PBXGroup;
+			children = (
+				183783D12AA9B0C800F16636 /* EventView.swift */,
+			);
+			path = Event;
+			sourceTree = "<group>";
+		};
+		18C3D8F62AA9CE9E006C0BDD /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				18C3D8F72AA9CEB6006C0BDD /* ImagePicker.swift */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
 		24660B622A6AA6570046EFEB /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -62,6 +86,7 @@
 				24F4218D2A67CF0300A4935A /* Main */,
 				24660B6C2A6AAAD00046EFEB /* EventCalendar */,
 				24660B6D2A6AAAE50046EFEB /* Calendar */,
+				183783D02AA9B0B500F16636 /* Event */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -85,10 +110,6 @@
 		24F4216E2A67C19800A4935A = {
 			isa = PBXGroup;
 			children = (
-				18F0B5FA2A8F439E009D854B /* Event+CoreDataClass.swift */,
-				18F0B5FB2A8F439E009D854B /* Event+CoreDataProperties.swift */,
-				18D3499C2A8E43C9001FAECC /* EventContent+CoreDataClass.swift */,
-				18D3499D2A8E43C9001FAECC /* EventContent+CoreDataProperties.swift */,
 				24F421792A67C19800A4935A /* EventCalendar */,
 				24F421782A67C19800A4935A /* Products */,
 			);
@@ -108,6 +129,7 @@
 				24F4217A2A67C19800A4935A /* EventCalendarApp.swift */,
 				24660B622A6AA6570046EFEB /* Model */,
 				24660B632A6AA65E0046EFEB /* View */,
+				18C3D8F62AA9CE9E006C0BDD /* Helper */,
 				24F4217E2A67C19A00A4935A /* Assets.xcassets */,
 				24F4218F2A67CF2F00A4935A /* Core Data */,
 				24F421802A67C19A00A4935A /* Preview Content */,
@@ -135,6 +157,10 @@
 		24F4218F2A67CF2F00A4935A /* Core Data */ = {
 			isa = PBXGroup;
 			children = (
+				18F0B5FA2A8F439E009D854B /* Event+CoreDataClass.swift */,
+				18D3499C2A8E43C9001FAECC /* EventContent+CoreDataClass.swift */,
+				18D3499D2A8E43C9001FAECC /* EventContent+CoreDataProperties.swift */,
+				18F0B5FB2A8F439E009D854B /* Event+CoreDataProperties.swift */,
 				24F421832A67C19A00A4935A /* Persistence.swift */,
 				24F421852A67C19A00A4935A /* EventCalendar.xcdatamodeld */,
 			);
@@ -214,10 +240,16 @@
 				24F421842A67C19A00A4935A /* Persistence.swift in Sources */,
 				24F4217D2A67C19800A4935A /* MainView.swift in Sources */,
 				24660B722A6AAB6A0046EFEB /* CalendarView.swift in Sources */,
+				18C3D8F92AA9D26E006C0BDD /* EventContent+CoreDataProperties.swift in Sources */,
+				18C3D8FC2AA9D26E006C0BDD /* EventContent+CoreDataClass.swift in Sources */,
+				183783D22AA9B0C800F16636 /* EventView.swift in Sources */,
 				24F421872A67C19A00A4935A /* EventCalendar.xcdatamodeld in Sources */,
+				18C3D8FB2AA9D26E006C0BDD /* Event+CoreDataProperties.swift in Sources */,
 				18F0B5F92A8F282D009D854B /* NewEventView.swift in Sources */,
 				24660B702A6AAB150046EFEB /* EventCalendarView.swift in Sources */,
+				18C3D8F82AA9CEB6006C0BDD /* ImagePicker.swift in Sources */,
 				1857E46A2A820E6D00B65B1E /* DateValue.swift in Sources */,
+				18C3D8FA2AA9D26E006C0BDD /* Event+CoreDataClass.swift in Sources */,
 				24F4217B2A67C19800A4935A /* EventCalendarApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

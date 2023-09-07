@@ -13,6 +13,10 @@ struct EventCalendarView: View {
     
     @Environment(\.managedObjectContext) private var viewContext
     @ObservedObject var m_event: Event
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \EventContent.date, ascending: true)])
+    private var m_eventContents: FetchedResults<EventContent>
+    @FocusState var m_bIsEditing: Bool
+    @State var m_dateCurrent: Date = Date()
     @State var m_bIsNewEventPresented: Bool = false
     
     // MARK: - Body
@@ -31,7 +35,14 @@ struct EventCalendarView: View {
                 .frame(maxWidth: .infinity, idealHeight: 300, alignment: .leading)
                 .padding(.horizontal, 20)
                 
-                CalendarView(m_dateStart: $m_event.startDate)
+                CalendarView(m_dateStart: $m_event.startDate, m_dateCurrent: $m_dateCurrent)
+                
+//                ForEach(m_eventContents) { eventContent in
+//                    if eventContent.date == m_dateCurrent {
+//                        EventView(m_dataImage: eventContent.image ?? Data(), m_strContent: eventContent.content ?? "")
+//                    }
+//                }
+                EventView(m_bIsEditing: _m_bIsEditing, m_dataImage: Data(), m_strContent: "")
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         }
@@ -45,6 +56,17 @@ struct EventCalendarView: View {
                 } label: {
                     Text("編輯")
                         .underline()
+                        .foregroundStyle(.green)
+                }
+            }
+            
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                
+                Button {
+                    m_bIsEditing = false
+                } label: {
+                    Text("確定")
                         .foregroundStyle(.green)
                 }
             }
@@ -63,7 +85,7 @@ struct EventCalendarView: View {
 struct EventCalendarView_Previews: PreviewProvider {
     
     static var previews: some View {
-        EventCalendarView(m_event: (PersistenceController.testData?[0])!)
+        EventCalendarView(m_event: (PersistenceController.testEventData![0]))
     }
     
 }
