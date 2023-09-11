@@ -11,6 +11,8 @@ struct CalendarView: View {
     
     // MARK: - Property Wrapper
     
+    @Environment(\.colorScheme) private var colorScheme
+    @Binding var m_eventContents: [EventContent]
     @Binding var m_dateStart: Date?
     @Binding var m_dateCurrent: Date
     @State var m_iCurrentMonth: Int = 0
@@ -61,7 +63,7 @@ struct CalendarView: View {
                     Text(day)
                         .font(.callout)
                         .fontWeight(.semibold)
-                        .foregroundStyle(day == m_aryDays.first || day == m_aryDays.last ? .gray : .black)
+                        .foregroundStyle(day == m_aryDays.first || day == m_aryDays.last ? .gray : colorScheme == .dark ? .white : .black)
                         .frame(maxWidth: .infinity)
                 }
             }
@@ -80,17 +82,17 @@ struct CalendarView: View {
                         Spacer()
                         
                         Circle()
-                            .foregroundStyle(isSameDay(dateValue: value, currentDate: m_dateCurrent) ? .green : .clear)
+                            .foregroundStyle(haveContent(dateValue: value) ? .gray : .clear)
                             .frame(width: 8, height: 8)
                     }
                     .frame(maxWidth: .infinity)
                     .background {
-                        if Calendar.current.dateComponents([.year, .month, .day], from: m_dateStart!) == Calendar.current.dateComponents([.year, .month, .day], from: m_dateCurrent) {
+                        if currentCalendar().dateComponents([.year, .month, .day], from: m_dateStart ?? Date()) == currentCalendar().dateComponents([.year, .month, .day], from: m_dateCurrent) {
                             Capsule()
                                 .foregroundStyle(LinearGradient(colors: [.green, .pink], startPoint: .top, endPoint: .bottom))
                                 .padding(.horizontal, 8)
                                 .opacity(isSameDay(dateValue: value, currentDate: m_dateCurrent) ? 1 : 0)
-                        } else if isSameDay(dateValue: value, currentDate: m_dateStart!) {
+                        } else if isSameDay(dateValue: value, currentDate: m_dateStart ?? Date()) {
                             Capsule()
                                 .foregroundStyle(.green)
                                 .padding(.horizontal, 8)
@@ -119,21 +121,34 @@ struct CalendarView: View {
     
     func isSameDay(dateValue: DateValue, currentDate: Date) -> Bool {
         if dateValue.day != -1 {
-            return Calendar.current.isDate(dateValue.date, inSameDayAs: currentDate)
+            return currentCalendar().isDate(dateValue.date, inSameDayAs: currentDate)
         } else {
             return false
         }
     }
     
+    func haveContent(dateValue: DateValue) -> Bool {
+        if !m_eventContents.isEmpty && dateValue.day != -1 {
+            for eventContent in m_eventContents {
+                return currentCalendar().isDate(dateValue.date, inSameDayAs: eventContent.date!)
+            }
+            
+        }
+        
+        return false
+    }
+    
     func extractData() -> [String] {
         let formatter = DateFormatter()
         formatter.dateFormat = "YYYY MMMM"
+        formatter.locale = Locale(identifier: "zh_Hant_TW")
+        formatter.timeZone = TimeZone(identifier: "Asia/Taipei")!
         
         return formatter.string(from: m_dateCurrent).components(separatedBy: " ")
     }
     
     func getCurrentMonth() -> Date {
-        let calendar = Calendar.current
+        let calendar = currentCalendar()
         
         guard let currentMonth = calendar.date(byAdding: .month, value: m_iCurrentMonth, to: Date()) else {
             return Date()
@@ -143,7 +158,7 @@ struct CalendarView: View {
     }
     
     func extractDate() -> [DateValue] {
-        let calendar = Calendar.current
+        let calendar = currentCalendar()
         let currentMonth = getCurrentMonth()
         
         var days = currentMonth.getAllDates().compactMap { date -> DateValue in
@@ -163,28 +178,14 @@ struct CalendarView: View {
     
 }
 
-// MARK: - Extension
-
-extension Date {
-    
-    func getAllDates() -> [Date] {
-        let calendar = Calendar.current
-        let startDate = calendar.date(from: calendar.dateComponents([.month, .year], from: self))!
-        let range = calendar.range(of: .day, in: .month, for: startDate)!
-        
-        return range.compactMap { day -> Date in
-            return calendar.date(byAdding: .day, value: day - 1, to: startDate)!
-        }
-    }
-    
-}
-
 // MARK: - Preview
 
 struct CalendarView_Previews: PreviewProvider {
     
     static var previews: some View {
-        CalendarView(m_dateStart: .constant(Date()), m_dateCurrent: .constant(Date()))
+        let testEventContentData = PersistenceController.testEventContentData!
+        
+        CalendarView(m_eventContents: .constant(testEventContentData), m_dateStart: .constant(Date()), m_dateCurrent: .constant(Date()))
     }
     
 }

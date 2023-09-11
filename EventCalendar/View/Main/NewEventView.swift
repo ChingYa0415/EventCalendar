@@ -163,27 +163,25 @@ struct NewEventView: View {
         }
     }
     
-    func editItem() {
-        withAnimation {
-            let fetchRequest = Event.fetchRequest()
-            fetchRequest.predicate = NSPredicate(format: "id == %@", m_uuidID! as CVarArg)
-            
-            do {
-                if let eventToUpdate = try? viewContext.fetch(fetchRequest).first {
-                    eventToUpdate.title = m_strTitle
-                    eventToUpdate.endDate = m_dateEnd
-                    eventToUpdate.startDate = m_dateStart
-                    eventToUpdate.content = m_strContent
-                    
-                    try viewContext.save()
-                    
-                    dismiss()
-                }
-            } catch {
-                let nsError = error as NSError
+    private func editItem() {
+        let fetchRequest = Event.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", m_uuidID! as CVarArg)
+        
+        do {
+            if let eventToUpdate = try? viewContext.fetch(fetchRequest).first {
+                eventToUpdate.title = m_strTitle
+                eventToUpdate.endDate = m_dateEnd
+                eventToUpdate.startDate = m_dateStart
+                eventToUpdate.content = m_strContent
                 
-                fatalError("編輯錯誤\(nsError), \(nsError.userInfo)")
+                try viewContext.save()
+                
+                dismiss()
             }
+        } catch {
+            let nsError = error as NSError
+            
+            fatalError("編輯錯誤\(nsError), \(nsError.userInfo)")
         }
     }
     

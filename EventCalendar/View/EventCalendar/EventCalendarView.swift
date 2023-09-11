@@ -13,10 +13,8 @@ struct EventCalendarView: View {
     
     @Environment(\.managedObjectContext) private var viewContext
     @ObservedObject var m_event: Event
-    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \EventContent.date, ascending: true)])
-    private var m_eventContents: FetchedResults<EventContent>
     @FocusState var m_bIsEditing: Bool
-    @State var m_dateCurrent: Date = Date()
+    @State var m_dateCurrent: Date = dateToDay()
     @State var m_bIsNewEventPresented: Bool = false
     
     // MARK: - Body
@@ -35,14 +33,9 @@ struct EventCalendarView: View {
                 .frame(maxWidth: .infinity, idealHeight: 300, alignment: .leading)
                 .padding(.horizontal, 20)
                 
-                CalendarView(m_dateStart: $m_event.startDate, m_dateCurrent: $m_dateCurrent)
+                CalendarView(m_eventContents: getEventContents(), m_dateStart: $m_event.startDate, m_dateCurrent: $m_dateCurrent)
                 
-//                ForEach(m_eventContents) { eventContent in
-//                    if eventContent.date == m_dateCurrent {
-//                        EventView(m_dataImage: eventContent.image ?? Data(), m_strContent: eventContent.content ?? "")
-//                    }
-//                }
-                EventView(m_bIsEditing: _m_bIsEditing, m_dataImage: Data(), m_strContent: "")
+                EventView(m_bIsEditing: _m_bIsEditing, m_eventContent: getCurrentEventContent(), m_event: m_event, m_dateCurrent: $m_dateCurrent)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         }
@@ -78,6 +71,48 @@ struct EventCalendarView: View {
         }
     }
     
+    // MARK: - Method
+    
+    func getCurrentEventContent() -> EventContent {
+        let fetchRequest = EventContent.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "event == %@", m_event.objectID)
+        
+        do {
+            let m_eventContents = try viewContext.fetch(fetchRequest) as [EventContent]
+            
+            for eventContent in m_eventContents {
+                if eventContent.date == m_dateCurrent {
+                    return eventContent
+                }
+            }
+            
+            return EventContent(context: viewContext)
+        } catch {
+            let nsError = error as NSError
+            
+            fatalError("取得EventContent錯誤\(nsError), \(nsError.userInfo)")
+        }
+    }
+    
+    func getEventContents() -> Binding<[EventContent]> {
+        let fetchRequest = EventContent.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "event == %@", m_event.objectID)
+        
+        do {
+            var m_eventContents = try viewContext.fetch(fetchRequest) as [EventContent]
+            
+            return Binding {
+                m_eventContents
+            } set: {
+                m_eventContents = $0
+            }
+        } catch {
+            let nsError = error as NSError
+            
+            fatalError("取得EventContent錯誤\(nsError), \(nsError.userInfo)")
+        }
+    }
+    
 }
 
 // MARK: - Preview
@@ -85,7 +120,9 @@ struct EventCalendarView: View {
 struct EventCalendarView_Previews: PreviewProvider {
     
     static var previews: some View {
-        EventCalendarView(m_event: (PersistenceController.testEventData![0]))
+        let testEventData = PersistenceController.testEventData![0]
+        
+        EventCalendarView(m_event: testEventData)
     }
     
 }

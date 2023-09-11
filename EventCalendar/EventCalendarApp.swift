@@ -16,6 +16,7 @@ struct EventCalendarApp: App {
         WindowGroup {
             MainView(m_bIsNewEventPresented: false, m_bIsAlertPresented: false)
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .environment(\.locale, Locale(identifier: "zh_Hant_TW"))
         }
     }
     

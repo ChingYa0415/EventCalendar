@@ -9,16 +9,32 @@ import SwiftUI
 
 struct EventView: View {
     
+    // MARK: - Enumeration
+    
+    enum PhotoSource: Identifiable {
+        case photoLibrary
+        case camera
+        
+        var id: Int {
+            hashValue
+        }
+    }
+    
+    // MARK: - Property Wrapper
+    
+    @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.isPresented) private var presentMode
     @FocusState var m_bIsEditing: Bool
-    @State var m_dataImage: Data
-    @State var m_strContent: String
+    @ObservedObject var m_eventContent: EventContent
+    @ObservedObject var m_event: Event
+    @Binding var m_dateCurrent: Date
+    @State var m_enumPhotoSource: PhotoSource?
     @State var m_bIsAddingImage: Bool = false
     @State var m_bIsAddingContent: Bool = false
     
     var body: some View {
         HStack(alignment: .center, spacing: 10) {
-            if !m_bIsAddingImage {
+            if m_eventContent.image == nil {
                 Button {
                     m_bIsAddingImage = true
                 } label: {
@@ -33,7 +49,7 @@ struct EventView: View {
                 .tint(.clear)
             }
             
-            if !m_bIsAddingContent {
+            if !m_bIsAddingContent && m_eventContent.content == "" {
                 Button {
                     m_bIsAddingContent = true
                 } label: {
@@ -49,23 +65,61 @@ struct EventView: View {
             }
         }
         .padding()
-        
-        VStack(alignment: .leading, spacing: 10) {
-            if m_bIsAddingImage {
-                if m_dataImage.isEmpty {
-                    Image(uiImage: UIImage(data: m_dataImage) ?? UIImage())
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .clipShape(RoundedRectangle(cornerRadius: 20))
-                }
+        .confirmationDialog("選擇圖片來源", isPresented: $m_bIsAddingImage, titleVisibility: .visible) {
+            Button("相機", role: .none) {
+                m_enumPhotoSource = .camera
             }
             
-            if m_bIsAddingContent {
+            Button("照片", role: .none) {
+                m_enumPhotoSource = .photoLibrary
+            }
+            
+            if m_eventContent.image != nil {
+                Button("刪除", role: .destructive) {
+                    m_eventContent.image = nil
+                }
+            }
+        }
+        .fullScreenCover(item: $m_enumPhotoSource) { source in
+            switch source {
+            case .camera:
+                ImagePicker(m_eventContent: m_eventContent, m_event: m_event, m_dateCurrent: $m_dateCurrent, sourceType: .camera).ignoresSafeArea()
+            case .photoLibrary:
+                ImagePicker(m_eventContent: m_eventContent, m_event: m_event, m_dateCurrent: $m_dateCurrent, sourceType: .photoLibrary).ignoresSafeArea()
+            }
+        }
+        
+        VStack(alignment: .leading, spacing: 10) {
+            if m_eventContent.image != nil {
+                Image(uiImage: UIImage(data: m_eventContent.image ?? Data()) ?? UIImage())
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                    .frame(height: 200)
+                    .frame(maxWidth: .infinity)
+                    .onTapGesture {
+                        m_bIsAddingImage = true
+                    }
+                    .onChange(of: m_eventContent.image) { newValue in
+                        if m_bIsAddingImage {
+                            print("m_bIsAddingImage")
+                            if m_eventContent.content == "" && m_eventContent.image == nil {
+                                print("上麵")
+                                deleteEventContent(m_eventContent.id!)
+                            } else {
+                                print("下面")
+                                addOrEditEventContent()
+                            }
+                        }
+                    }
+            }
+            
+            if m_bIsAddingContent || m_eventContent.content != "" {
                 Text("備註")
                     .padding(.vertical, 10)
                     .font(.subheadline)
                 
-                TextEditor(text: $m_strContent)
+                TextEditor(text: $m_eventContent.content)
                     .padding(10)
                     .frame(minHeight: 200, maxHeight: .infinity, alignment: .topLeading)
                     .overlay {
@@ -73,9 +127,74 @@ struct EventView: View {
                             .stroke(.gray, lineWidth: 1.0)
                     }
                     .focused($m_bIsEditing)
+                    .onChange(of: m_eventContent.content) { newValue in
+                        if m_bIsAddingContent {
+                            if m_eventContent.content == "" && m_eventContent.image == nil {
+                                deleteEventContent(m_eventContent.id!)
+                            } else {
+                                addOrEditEventContent()
+                            }
+                        }
+                    }
             }
         }
         .padding()
+        .onChange(of: m_dateCurrent) { newValue in
+            m_bIsAddingImage = false
+            m_bIsAddingContent = false
+        }
+    }
+    
+    // MARK: - Method
+    
+    private func addOrEditEventContent() {
+        do {
+            if m_eventContent.id != nil {
+                print("have id")
+                let fetchRequest = EventContent.fetchRequest()
+                fetchRequest.predicate = NSPredicate(format: "id == %@", (m_eventContent.id! as CVarArg))
+                
+                if let eventContentToUpdate = try? viewContext.fetch(fetchRequest).first {
+                    eventContentToUpdate.content = m_eventContent.content
+                    eventContentToUpdate.image = m_eventContent.image
+                    eventContentToUpdate.date = m_dateCurrent
+                    print(eventContentToUpdate)
+                }
+            } else {
+                print("dont have id")
+                let eventContent = EventContent(context: viewContext)
+                eventContent.id = UUID()
+                eventContent.content = m_eventContent.content
+                eventContent.image = m_eventContent.image
+                eventContent.date = m_dateCurrent
+                eventContent.event = m_event
+                print(eventContent)
+            }
+            
+            try viewContext.save()
+        } catch {
+            let nsError = error as NSError
+            
+            fatalError("新增錯誤\(nsError), \(nsError.userInfo)")
+        }
+    }
+    
+    private func deleteEventContent(_ id: UUID) {
+        do {
+            let fetchRequest = EventContent.fetchRequest()
+            fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+            
+            if let eventContentToDelete = try? viewContext.fetch(fetchRequest).first {
+                print("刪除！")
+                viewContext.delete(eventContentToDelete)
+            }
+            
+            try viewContext.save()
+        } catch {
+            let nsError = error as NSError
+            
+            fatalError("刪除錯誤\(nsError), \(nsError.userInfo)")
+        }
     }
     
 }
@@ -85,9 +204,10 @@ struct EventView: View {
 struct EventView_Previews: PreviewProvider {
     
     static var previews: some View {
-        let testData = PersistenceController.testEventContentData![0]
+        let testEventData = PersistenceController.testEventData![0]
+        let testEventContentData = PersistenceController.testEventContentData![0]
         
-        EventView(m_dataImage: testData.image!, m_strContent: testData.content ?? "")
+        EventView(m_eventContent: testEventContentData, m_event: testEventData, m_dateCurrent: .constant(Date()))
     }
     
 }

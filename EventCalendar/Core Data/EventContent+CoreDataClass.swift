@@ -11,5 +11,5 @@ import CoreData
 
 @objc(EventContent)
 public class EventContent: NSManagedObject {
-
+    
 }

@@ -101,14 +101,11 @@ struct MainView: View {
                     NewEventView()
                 }
                 .alert("全部刪除", isPresented: $m_bIsAlertPresented) {
-                    Button {
+                    Button("取消", role: .cancel) {
                         m_bIsAlertPresented = false
-                    } label: {
-                        // MARK: TODO: 更改文字顏色
-                        Text("取消")
                     }
                     
-                    Button {
+                    Button("確定", role: .destructive) {
                         withAnimation {
                             do {
                                 for event in m_events {
@@ -120,9 +117,6 @@ struct MainView: View {
                                 print("刪除全部資料錯誤：", error)
                             }
                         }
-                    } label: {
-                        // MARK: TODO: 更改文字顏色
-                        Text("好")
                     }
                 } message: {
                     Text("確定要刪除全部資料嗎？")

@@ -21,6 +21,7 @@ extension Event {
     @NSManaged public var id: UUID?
     @NSManaged public var title: String?
     @NSManaged public var endDate: Date?
+    @NSManaged public var eventContents: NSSet?
 
 }
 
