@@ -6,7 +6,7 @@
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="startDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="title" optional="YES" attributeType="String"/>
-        <relationship name="eventContents" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventContent" inverseName="event" inverseEntity="EventContent"/>
+        <relationship name="eventContents" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EventContent" inverseName="event" inverseEntity="EventContent"/>
     </entity>
     <entity name="EventContent" representedClassName="EventContent" syncable="YES">
         <attribute name="content" attributeType="String" defaultValueString=""/>

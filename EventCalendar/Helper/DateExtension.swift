@@ -15,13 +15,13 @@ func currentCalendar() -> Calendar {
     return calendar
 }
 
-func dateToDay() -> Date {
+func dateToDay(_ date: Date? = nil) -> Date {
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "yyyy/MM/dd"
     dateFormatter.locale = Locale(identifier: "zh_Hant_TW")
     dateFormatter.timeZone = TimeZone(identifier: "Asia/Taipei")!
    
-    return  dateFormatter.date(from: dateFormatter.string(from: Date()))!
+    return  dateFormatter.date(from: dateFormatter.string(from: date ?? Date()))!
 }
 
 extension Date {

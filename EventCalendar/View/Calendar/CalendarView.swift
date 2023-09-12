@@ -14,6 +14,7 @@ struct CalendarView: View {
     @Environment(\.colorScheme) private var colorScheme
     @Binding var m_eventContents: [EventContent]
     @Binding var m_dateStart: Date?
+    @Binding var m_dateEnd: Date?
     @Binding var m_dateCurrent: Date
     @State var m_iCurrentMonth: Int = 0
     
@@ -87,16 +88,30 @@ struct CalendarView: View {
                     }
                     .frame(maxWidth: .infinity)
                     .background {
-                        if currentCalendar().dateComponents([.year, .month, .day], from: m_dateStart ?? Date()) == currentCalendar().dateComponents([.year, .month, .day], from: m_dateCurrent) {
-                            Capsule()
-                                .foregroundStyle(LinearGradient(colors: [.green, .pink], startPoint: .top, endPoint: .bottom))
-                                .padding(.horizontal, 8)
-                                .opacity(isSameDay(dateValue: value, currentDate: m_dateCurrent) ? 1 : 0)
-                        } else if isSameDay(dateValue: value, currentDate: m_dateStart ?? Date()) {
-                            Capsule()
-                                .foregroundStyle(.green)
-                                .padding(.horizontal, 8)
-                                .opacity(1)
+                        if isSameDay(dateValue: value, currentDate: m_dateStart!) {
+                            if isSameDay(date1: m_dateStart!, date2: m_dateCurrent) {
+                                Capsule()
+                                    .foregroundStyle(LinearGradient(colors: [.green, .pink], startPoint: .top, endPoint: .bottom))
+                                    .padding(.horizontal, 8)
+                                    .opacity(1)
+                            } else {
+                                Capsule()
+                                    .foregroundStyle(.green)
+                                    .padding(.horizontal, 8)
+                                    .opacity(1)
+                            }
+                        } else if m_dateEnd != nil, isSameDay(dateValue: value, currentDate: m_dateEnd!) {
+                            if isSameDay(date1: m_dateEnd!, date2: m_dateCurrent) {
+                                Capsule()
+                                    .foregroundStyle(LinearGradient(colors: [.blue, .pink], startPoint: .top, endPoint: .bottom))
+                                    .padding(.horizontal, 8)
+                                    .opacity(1)
+                            } else {
+                                Capsule()
+                                    .foregroundStyle(.blue)
+                                    .padding(.horizontal, 8)
+                                    .opacity(1)
+                            }
                         } else {
                             Capsule()
                                 .foregroundStyle(.pink)
@@ -120,19 +135,20 @@ struct CalendarView: View {
     // MARK: - Method
     
     func isSameDay(dateValue: DateValue, currentDate: Date) -> Bool {
-        if dateValue.day != -1 {
-            return currentCalendar().isDate(dateValue.date, inSameDayAs: currentDate)
-        } else {
-            return false
-        }
+        return dateValue.day != -1 ? currentCalendar().isDate(dateValue.date, inSameDayAs: currentDate) : false
+    }
+    
+    func isSameDay(date1: Date, date2: Date) -> Bool {
+        return currentCalendar().isDate(date1, inSameDayAs: date2)
     }
     
     func haveContent(dateValue: DateValue) -> Bool {
-        if !m_eventContents.isEmpty && dateValue.day != -1 {
+        if dateValue.day != -1 {
             for eventContent in m_eventContents {
-                return currentCalendar().isDate(dateValue.date, inSameDayAs: eventContent.date!)
+                if currentCalendar().isDate(dateValue.date, inSameDayAs: eventContent.date!) {
+                    return true
+                }
             }
-            
         }
         
         return false
@@ -185,7 +201,7 @@ struct CalendarView_Previews: PreviewProvider {
     static var previews: some View {
         let testEventContentData = PersistenceController.testEventContentData!
         
-        CalendarView(m_eventContents: .constant(testEventContentData), m_dateStart: .constant(Date()), m_dateCurrent: .constant(Date()))
+        CalendarView(m_eventContents: .constant(testEventContentData), m_dateStart: .constant(Date()), m_dateEnd: .constant(Date()), m_dateCurrent: .constant(Date()))
     }
     
 }

@@ -20,7 +20,8 @@ struct NewEventView: View {
     
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) var dismiss
-    @FocusState var m_bIsEditing: Bool
+    @FocusState var m_bIsTitleEditing: Bool
+    @FocusState var m_bIsContentEditing: Bool
     @State var m_uuidID: UUID?
     @State var m_enumType: NewType = .Add
     @State var m_strTitle: String = ""
@@ -38,7 +39,7 @@ struct NewEventView: View {
             List {
                 Section {
                     TextField("標題", text: $m_strTitle)
-                        .focused($m_bIsEditing)
+                        .focused($m_bIsTitleEditing)
                 }
                 
                 Section {
@@ -63,7 +64,7 @@ struct NewEventView: View {
                 
                 Section {
                     ZStack {
-                        if m_strContent.isEmpty && !m_bIsEditing {
+                        if m_strContent.isEmpty && !m_bIsContentEditing {
                             Text("備註")
                                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                                 .foregroundStyle(.gray)
@@ -72,7 +73,7 @@ struct NewEventView: View {
                         
                         TextEditor(text: $m_strContent)
                             .frame(minHeight: 200, maxHeight: .infinity, alignment: .topLeading)
-                            .focused($m_bIsEditing)
+                            .focused($m_bIsContentEditing)
                     }
                 }
             }
@@ -112,7 +113,8 @@ struct NewEventView: View {
                     Spacer()
                     
                     Button {
-                        m_bIsEditing = false
+                        m_bIsTitleEditing = false
+                        m_bIsContentEditing = false
                     } label: {
                         Text("確定")
                             .foregroundStyle(.green)
@@ -145,8 +147,8 @@ struct NewEventView: View {
             }
             
             event.title = m_strTitle
-            event.startDate = m_dateStart
-            event.endDate = m_bHasEndDay ? m_dateEnd : nil
+            event.startDate = dateToDay(m_dateStart)
+            event.endDate = m_bHasEndDay ? dateToDay(m_dateEnd) : nil
             event.content = m_strContent
             
             do {

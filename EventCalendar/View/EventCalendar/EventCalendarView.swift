@@ -33,7 +33,7 @@ struct EventCalendarView: View {
                 .frame(maxWidth: .infinity, idealHeight: 300, alignment: .leading)
                 .padding(.horizontal, 20)
                 
-                CalendarView(m_eventContents: getEventContents(), m_dateStart: $m_event.startDate, m_dateCurrent: $m_dateCurrent)
+                CalendarView(m_eventContents: getEventContents(), m_dateStart: $m_event.startDate, m_dateEnd: $m_event.endDate, m_dateCurrent: $m_dateCurrent)
                 
                 EventView(m_bIsEditing: _m_bIsEditing, m_eventContent: getCurrentEventContent(), m_event: m_event, m_dateCurrent: $m_dateCurrent)
             }

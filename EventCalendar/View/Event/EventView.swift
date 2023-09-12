@@ -76,7 +76,7 @@ struct EventView: View {
             
             if m_eventContent.image != nil {
                 Button("刪除", role: .destructive) {
-                    m_eventContent.image = nil
+                    m_eventContent.image = Data()
                 }
             }
         }
@@ -101,15 +101,18 @@ struct EventView: View {
                         m_bIsAddingImage = true
                     }
                     .onChange(of: m_eventContent.image) { newValue in
+                        print("on change image")
                         if m_bIsAddingImage {
                             print("m_bIsAddingImage")
                             if m_eventContent.content == "" && m_eventContent.image == nil {
-                                print("上麵")
+                                print("上面 刪除")
                                 deleteEventContent(m_eventContent.id!)
                             } else {
-                                print("下面")
+                                print("下面 增加或編輯")
                                 addOrEditEventContent()
                             }
+                        } else {
+                            deleteEventContent(m_eventContent.id!)
                         }
                     }
             }
@@ -161,7 +164,7 @@ struct EventView: View {
                     print(eventContentToUpdate)
                 }
             } else {
-                print("dont have id")
+                print("don't have id")
                 let eventContent = EventContent(context: viewContext)
                 eventContent.id = UUID()
                 eventContent.content = m_eventContent.content
