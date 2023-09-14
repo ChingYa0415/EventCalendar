@@ -89,7 +89,17 @@ struct CalendarView: View {
                     .frame(maxWidth: .infinity)
                     .background {
                         if m_dateStart != nil, isSameDay(dateValue: value, currentDate: m_dateStart!) {
-                            if isSameDay(date1: m_dateStart!, date2: m_dateCurrent) {
+                            if m_dateEnd != nil, isSameDay(date1: m_dateStart!, date2: m_dateEnd!), isSameDay(date1: m_dateStart!, date2: m_dateCurrent) {
+                                Capsule()
+                                    .foregroundStyle(LinearGradient(colors: [.green, .blue, .pink], startPoint: .top, endPoint: .bottom))
+                                    .padding(.horizontal, 8)
+                                    .opacity(1)
+                            } else if m_dateEnd != nil, isSameDay(date1: m_dateStart!, date2: m_dateEnd!) {
+                                Capsule()
+                                    .foregroundStyle(LinearGradient(colors: [.green, .blue], startPoint: .top, endPoint: .bottom))
+                                    .padding(.horizontal, 8)
+                                    .opacity(1)
+                            } else if isSameDay(date1: m_dateStart!, date2: m_dateCurrent) {
                                 Capsule()
                                     .foregroundStyle(LinearGradient(colors: [.green, .pink], startPoint: .top, endPoint: .bottom))
                                     .padding(.horizontal, 8)
