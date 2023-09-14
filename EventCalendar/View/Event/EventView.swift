@@ -49,7 +49,7 @@ struct EventView: View {
                 .tint(.clear)
             }
             
-            if !m_bIsAddingContent && m_eventContent.content == "" {
+            if !m_bIsAddingContent && m_eventContent.content.isEmpty {
                 Button {
                     m_bIsAddingContent = true
                 } label: {
@@ -101,14 +101,10 @@ struct EventView: View {
                         m_bIsAddingImage = true
                     }
                     .onChange(of: m_eventContent.image) { newValue in
-                        print("on change image")
                         if m_bIsAddingImage {
-                            print("m_bIsAddingImage")
-                            if m_eventContent.content == "" && m_eventContent.image == nil {
-                                print("上面 刪除")
+                            if m_eventContent.content.isEmpty && m_eventContent.image == nil {
                                 deleteEventContent(m_eventContent.id!)
                             } else {
-                                print("下面 增加或編輯")
                                 addOrEditEventContent()
                             }
                         } else {
@@ -117,7 +113,7 @@ struct EventView: View {
                     }
             }
             
-            if m_bIsAddingContent || m_eventContent.content != "" {
+            if m_bIsAddingContent || !m_eventContent.content.isEmpty {
                 Text("備註")
                     .padding(.vertical, 10)
                     .font(.subheadline)
@@ -132,7 +128,7 @@ struct EventView: View {
                     .focused($m_bIsEditing)
                     .onChange(of: m_eventContent.content) { newValue in
                         if m_bIsAddingContent {
-                            if m_eventContent.content == "" && m_eventContent.image == nil {
+                            if m_eventContent.content.isEmpty && m_eventContent.image == nil {
                                 deleteEventContent(m_eventContent.id!)
                             } else {
                                 addOrEditEventContent()
@@ -153,7 +149,6 @@ struct EventView: View {
     private func addOrEditEventContent() {
         do {
             if m_eventContent.id != nil {
-                print("have id")
                 let fetchRequest = EventContent.fetchRequest()
                 fetchRequest.predicate = NSPredicate(format: "id == %@", (m_eventContent.id! as CVarArg))
                 
@@ -161,17 +156,14 @@ struct EventView: View {
                     eventContentToUpdate.content = m_eventContent.content
                     eventContentToUpdate.image = m_eventContent.image
                     eventContentToUpdate.date = m_dateCurrent
-                    print(eventContentToUpdate)
                 }
             } else {
-                print("don't have id")
                 let eventContent = EventContent(context: viewContext)
                 eventContent.id = UUID()
                 eventContent.content = m_eventContent.content
                 eventContent.image = m_eventContent.image
                 eventContent.date = m_dateCurrent
                 eventContent.event = m_event
-                print(eventContent)
             }
             
             try viewContext.save()
@@ -188,7 +180,6 @@ struct EventView: View {
             fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
             
             if let eventContentToDelete = try? viewContext.fetch(fetchRequest).first {
-                print("刪除！")
                 viewContext.delete(eventContentToDelete)
             }
             

@@ -57,22 +57,18 @@ struct ImagePicker: UIViewControllerRepresentable {
             if let image = info[.originalImage] as? UIImage {
                 do {
                     if parent.m_eventContent.id != nil {
-                        print("已經有")
                         let fetchRequest = EventContent.fetchRequest()
                         fetchRequest.predicate = NSPredicate(format: "id == %@", parent.m_eventContent.id! as CVarArg)
                         
                         if let eventContentToUpdate = try? parent.viewContext.fetch(fetchRequest).first {
                             eventContentToUpdate.image = image.jpegData(compressionQuality: 1.0)!
-                            print(eventContentToUpdate)
                         }
                     } else {
-                        print("+")
                         let eventContent = EventContent(context: parent.viewContext)
                         eventContent.id = UUID()
                         eventContent.image = image.jpegData(compressionQuality: 1.0)!
                         eventContent.date = parent.m_dateCurrent
                         eventContent.event = parent.m_event
-                        print(eventContent)
                     }
                     
                     try parent.viewContext.save()

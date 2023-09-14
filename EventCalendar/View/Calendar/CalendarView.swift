@@ -88,7 +88,7 @@ struct CalendarView: View {
                     }
                     .frame(maxWidth: .infinity)
                     .background {
-                        if isSameDay(dateValue: value, currentDate: m_dateStart!) {
+                        if m_dateStart != nil, isSameDay(dateValue: value, currentDate: m_dateStart!) {
                             if isSameDay(date1: m_dateStart!, date2: m_dateCurrent) {
                                 Capsule()
                                     .foregroundStyle(LinearGradient(colors: [.green, .pink], startPoint: .top, endPoint: .bottom))

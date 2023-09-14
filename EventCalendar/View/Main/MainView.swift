@@ -13,10 +13,9 @@ struct MainView: View {
     // MARK: - Property Wrapper
     
     @Environment(\.managedObjectContext) private var viewContext
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Event.startDate, ascending: true)]) private var m_events: FetchedResults<Event>
     @State var m_bIsNewEventPresented: Bool
     @State var m_bIsAlertPresented: Bool
-    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Event.startDate, ascending: true)])
-    private var m_events: FetchedResults<Event>
     
     // MARK: - Property
     
@@ -31,96 +30,78 @@ struct MainView: View {
     
     var body: some View {
         NavigationView {
-            if m_events.isEmpty {
-                Text("空的")
-                    .navigationTitle(Text("事件"))
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            Button {
-                                m_bIsNewEventPresented.toggle()
-                            } label: {
-                                Image(systemName: "plus")
-                                    .foregroundColor(.green)
-                            }
-                        }
+            List {
+                ForEach(m_events, id: \.self) { event in
+                    NavigationLink {
+                        EventCalendarView(m_event: event)
+                    } label: {
+                        Image(systemName: "calendar")
+                            .imageScale(.large)
+                            .padding()
+                            .background(.pink)
+                            .clipShape(Circle())
+                        
+                        Text(event.startDate!, formatter: itemFormatter)
+                            .padding(.leading, 20)
+                            .foregroundStyle(.green)
+                            .font(.subheadline)
+                        
+                        Text("\(event.title!)")
+                            .bold()
+                            .padding(.leading, 20)
+                            .foregroundStyle(.green)
+                            .font(.subheadline)
+                            .lineLimit(2)
                     }
-                    .sheet(isPresented: $m_bIsNewEventPresented) {
-                        NewEventView()
-                    }
-            } else {
-                List {
-                    ForEach(m_events) { event in
-                        NavigationLink {
-                            EventCalendarView(m_event: event)
-                        } label: {
-                            Image(systemName: "calendar")
-                                .imageScale(.large)
-                                .padding()
-                                .background(.pink)
-                                .clipShape(Circle())
-                            
-                            Text(event.startDate!, formatter: itemFormatter)
-                                .padding(.leading, 20)
-                                .foregroundStyle(.green)
-                                .font(.subheadline)
-                            
-                            Text("\(event.title!)")
-                                .bold()
-                                .padding(.leading, 20)
-                                .foregroundStyle(.green)
-                                .font(.subheadline)
-                                .lineLimit(2)
-                        }
-                    }
-                    .onDelete(perform: deleteItems)
                 }
-                .navigationTitle(Text("事件"))
-                .toolbar {
-                    ToolbarItemGroup(placement: .topBarTrailing) {
-                        if !m_events.isEmpty {
-                            Button {
-                                m_bIsAlertPresented = true
-                            } label: {
-                                Text("全部刪除")
-                                    .underline()
-                                    .foregroundStyle(.red)
-                            }
-                        }
-                        
-                        Spacer()
-                        
+                .onDelete(perform: deleteItems)
+            }
+            .navigationTitle(Text("事件"))
+            .toolbar {
+                ToolbarItemGroup(placement: .topBarTrailing) {
+                    if !m_events.isEmpty {
                         Button {
-                            m_bIsNewEventPresented.toggle()
+                            m_bIsAlertPresented = true
                         } label: {
-                            Image(systemName: "plus")
-                                .foregroundColor(.green)
+                            Text("全部刪除")
+                                .underline()
+                                .foregroundStyle(.red)
                         }
-                    }
-                }
-                .sheet(isPresented: $m_bIsNewEventPresented) {
-                    NewEventView()
-                }
-                .alert("全部刪除", isPresented: $m_bIsAlertPresented) {
-                    Button("取消", role: .cancel) {
-                        m_bIsAlertPresented = false
                     }
                     
-                    Button("確定", role: .destructive) {
-                        withAnimation {
-                            do {
-                                for event in m_events {
-                                    viewContext.delete(event)
-                                }
-                                
-                                try viewContext.save()
-                            } catch {
-                                print("刪除全部資料錯誤：", error)
+                    Spacer()
+                    
+                    Button {
+                        m_bIsNewEventPresented.toggle()
+                    } label: {
+                        Image(systemName: "plus")
+                            .foregroundColor(.green)
+                    }
+                }
+            }
+            .sheet(isPresented: $m_bIsNewEventPresented) {
+                NewEventView()
+            }
+            .alert("全部刪除", isPresented: $m_bIsAlertPresented) {
+                Button("取消", role: .cancel) {
+                    m_bIsAlertPresented = false
+                }
+                
+                Button("確定", role: .destructive) {
+                    withAnimation {
+                        do {
+                            for event in m_events {
+                                viewContext.delete(event)
                             }
+                            
+                            try viewContext.save()
+                        } catch {
+                            print("刪除全部資料錯誤：", error)
                         }
                     }
-                } message: {
-                    Text("確定要刪除全部資料嗎？")
                 }
+            } message: {
+                Text("確定要刪除全部資料嗎？")
             }
         }
     }

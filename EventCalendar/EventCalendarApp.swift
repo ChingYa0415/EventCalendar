@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct EventCalendarApp: App {
+ struct EventCalendarApp: App {
     
     let persistenceController = PersistenceController.shared
 

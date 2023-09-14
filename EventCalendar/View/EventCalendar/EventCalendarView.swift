@@ -65,8 +65,6 @@ struct EventCalendarView: View {
             }
         }
         .sheet(isPresented: $m_bIsNewEventPresented) {
-            print(m_event.startDate!)
-        } content: {
             NewEventView(m_uuidID: m_event.id, m_enumType: .Edit, m_strTitle: m_event.title!, m_bHasEndDay: m_event.endDate != nil ? true : false, m_dateStart: m_event.startDate!, m_dateEnd: m_event.endDate != nil ? m_event.endDate! : Date(timeInterval: 3600, since: m_event.startDate!), m_strContent: m_event.content!)
         }
     }

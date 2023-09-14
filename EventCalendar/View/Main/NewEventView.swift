@@ -142,8 +142,12 @@ struct NewEventView: View {
             let event = Event(context: viewContext)
             event.id = UUID()
             
-            if m_strTitle == "" {
+            if m_strTitle.isEmpty {
                 m_strTitle = "新增事件"
+            }
+            
+            if m_strContent.isEmpty {
+                m_strContent = "新增事件內容"
             }
             
             event.title = m_strTitle
@@ -156,8 +160,6 @@ struct NewEventView: View {
                 
                 dismiss()
             } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
                 let nsError = error as NSError
                 
                 fatalError("新增錯誤\(nsError), \(nsError.userInfo)")
