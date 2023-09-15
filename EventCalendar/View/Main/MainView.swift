@@ -13,7 +13,7 @@ struct MainView: View {
     // MARK: - Property Wrapper
     
     @Environment(\.managedObjectContext) private var viewContext
-    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Event.startDate, ascending: true)]) 
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Event.startDate, ascending: true)])
     private var m_events: FetchedResults<Event>
     @State var m_bIsNewEventPresented: Bool
     @State var m_bIsDeleteAllAlertPresented: Bool
@@ -23,88 +23,95 @@ struct MainView: View {
     
     var body: some View {
         NavigationView {
-            List {
-                ForEach(m_events) { event in
-                    ZStack {
-                        MainEventCellView(m_strTitle: event.title!, m_dateStart: event.startDate!, m_strElapsedTime: setElapsedTime(event.startDate!))
-                        
-                        NavigationLink {
-                            EventCalendarView(m_event: event)
-                        } label: {
-                            EmptyView()
+            ZStack {
+                List {
+                    ForEach(m_events) { event in
+                        ZStack {
+                            MainEventCellView(m_strTitle: event.title!, m_dateStart: event.startDate!, m_strElapsedTime: setElapsedTime(event.startDate!))
+                            
+                            NavigationLink {
+                                EventCalendarView(m_event: event)
+                            } label: {
+                                EmptyView()
+                            }
+                            .opacity(0)
                         }
-                        .opacity(0)
                     }
+                    .onDelete(perform: deleteItems)
                 }
-                .onDelete(perform: deleteItems)
-            }
-            .navigationTitle(Text("事件"))
-            .toolbar {
-                ToolbarItemGroup(placement: .topBarTrailing) {
-                    if !m_events.isEmpty {
-                        Button {
-                            m_bIsDeleteAllAlertPresented = true
-                        } label: {
-                            Text("全部刪除")
-                                .underline()
-                                .foregroundStyle(.red)
-                        }
-                        
-                        Spacer()
-                        
-                        Button {
-                            m_bIsHelpAlertPresented = true
-                        } label: {
-                            Image(systemName: "questionmark.circle")
-                                .foregroundStyle(.black)
-                        }
-                    }
-                    
-                    Spacer()
-                    
-                    Button {
-                        m_bIsNewEventPresented.toggle()
-                    } label: {
-                        Image(systemName: "plus")
-                            .foregroundColor(.green)
-                    }
-                }
-            }
-            .sheet(isPresented: $m_bIsNewEventPresented) {
-                NewEventView()
-            }
-            .alert("全部刪除", isPresented: $m_bIsDeleteAllAlertPresented) {
-                Text("取消")
-                
-                Button("確定", role: .destructive) {
-                    withAnimation {
-                        do {
-                            for event in m_events {
-                                viewContext.delete(event)
+                .navigationTitle(Text("事件"))
+                .toolbar {
+                    ToolbarItemGroup(placement: .topBarTrailing) {
+                        if !m_events.isEmpty {
+                            Button {
+                                m_bIsDeleteAllAlertPresented = true
+                            } label: {
+                                Text("全部刪除")
+                                    .underline()
+                                    .foregroundStyle(.red)
                             }
                             
-                            try viewContext.save()
-                        } catch {
-                            print("刪除全部資料錯誤：", error)
+                            Spacer()
+                            
+                            Button {
+                                m_bIsHelpAlertPresented = true
+                            } label: {
+                                Image(systemName: "questionmark.circle")
+                                    .foregroundStyle(.black)
+                            }
                         }
                     }
                 }
-            } message: {
-                Text("確定要刪除全部資料嗎？")
-            }
-            .alert("", isPresented: $m_bIsHelpAlertPresented) {
-                Text("好")
-            } message: {
-                Text("經過日期以天為單位來進行計算")
-            }
-            .refreshable {
-                do {
-                    try await Task.sleep(nanoseconds: 1 * 1000000000)
-                } catch {
-                    print(error)
+                .sheet(isPresented: $m_bIsNewEventPresented) {
+                    NewEventView()
+                }
+                .alert("全部刪除", isPresented: $m_bIsDeleteAllAlertPresented) {
+                    Text("取消")
+                    
+                    Button("確定", role: .destructive) {
+                        withAnimation {
+                            do {
+                                for event in m_events {
+                                    viewContext.delete(event)
+                                }
+                                
+                                try viewContext.save()
+                            } catch {
+                                print("刪除全部資料錯誤：", error)
+                            }
+                        }
+                    }
+                } message: {
+                    Text("確定要刪除全部資料嗎？")
+                }
+                .alert("", isPresented: $m_bIsHelpAlertPresented) {
+                    Text("好")
+                } message: {
+                    Text("經過日期以天為單位來進行計算")
+                }
+                .refreshable {
+                    do {
+                        try await Task.sleep(nanoseconds: 1 * 1000000000)
+                        
+                        viewContext.refreshAllObjects()
+                    } catch {
+                        print(error)
+                    }
                 }
                 
-                viewContext.refreshAllObjects()
+                Button {
+                    m_bIsNewEventPresented = true
+                } label: {
+                    Image(systemName: "plus.circle.fill")
+                        .resizable()
+                        .foregroundStyle(.green)
+                        .frame(width: 60, height: 60)
+                        .background(in: RoundedRectangle(cornerSize: CGSize(width: 30, height: 30)))
+                    
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
+                .tint(.clear)
+                .padding()
             }
         }
     }
