@@ -56,7 +56,7 @@ struct MainView: View {
                             Button {
                                 m_bIsHelpAlertPresented = true
                             } label: {
-                                Image(systemName: "questionmark.circle")
+                                Image(systemName: "info.circle")
                                     .foregroundStyle(.black)
                             }
                         }
