@@ -103,6 +103,9 @@ struct MainView: View {
             } message: {
                 Text("確定要刪除全部資料嗎？")
             }
+            .refreshable {
+                viewContext.refreshAllObjects()
+            }
         }
     }
     

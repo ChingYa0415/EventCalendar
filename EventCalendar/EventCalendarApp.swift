@@ -8,10 +8,10 @@
 import SwiftUI
 
 @main
- struct EventCalendarApp: App {
+struct EventCalendarApp: App {
     
     let persistenceController = PersistenceController.shared
-
+    
     var body: some Scene {
         WindowGroup {
             MainView(m_bIsNewEventPresented: false, m_bIsAlertPresented: false)
