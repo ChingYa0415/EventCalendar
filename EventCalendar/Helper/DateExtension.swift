@@ -7,6 +7,23 @@
 
 import Foundation
 
+let itemFormatter: DateFormatter = {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "yyyy/MM/dd"
+    
+    return dateFormatter
+}()
+
+func setElapsedTime(_ date: Date) -> String {
+    let date = Calendar.current.dateComponents([.day, .hour, .minute, .second], from: date, to: Date())
+    
+    if let day = date.day {
+        return String(day < 0 ? "\(abs(day))天後開始" : "\(day)天")
+    }
+    
+    return ""
+}
+
 func currentCalendar() -> Calendar {
     var calendar = Calendar.current
     calendar.locale = Locale(identifier: "zh_Hant_TW")

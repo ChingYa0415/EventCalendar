@@ -26,7 +26,6 @@ struct NewEventView: View {
     @State var m_enumType: NewType = .Add
     @State var m_strTitle: String = ""
     @State var m_bHasEndDay: Bool = false
-    @State var m_bIsAllDay: Bool = false
     @State var m_dateStart: Date = Date()
     @State var m_dateEnd: Date = Date(timeInterval: 3600, since: Date())
     @State var m_strContent: String = ""
@@ -45,20 +44,10 @@ struct NewEventView: View {
                 Section {
                     Toggle("結束日", isOn: $m_bHasEndDay)
                     
-                    Toggle("整日", isOn: $m_bIsAllDay)
+                    DatePicker("開始", selection: $m_dateStart, displayedComponents: .date)
                     
-                    if m_bIsAllDay {
-                        DatePicker("開始", selection: $m_dateStart, displayedComponents: .date)
-                        
-                        if m_bHasEndDay {
-                            DatePicker("結束", selection: $m_dateEnd, displayedComponents: .date)
-                        }
-                    } else {
-                        DatePicker("開始", selection: $m_dateStart)
-                        
-                        if m_bHasEndDay {
-                            DatePicker("結束", selection: $m_dateEnd)
-                        }
+                    if m_bHasEndDay {
+                        DatePicker("結束", selection: $m_dateEnd, displayedComponents: .date)
                     }
                 }
                 
@@ -196,7 +185,7 @@ struct NewEventView: View {
 struct NewEventView_Previews: PreviewProvider {
     
     static var previews: some View {
-        NewEventView(m_strTitle: "", m_bIsAllDay: false, m_dateStart: Date(), m_dateEnd: Date().addingTimeInterval(3600), m_strContent: "")
+        NewEventView(m_strTitle: "", m_dateStart: Date(), m_dateEnd: Date().addingTimeInterval(3600), m_strContent: "")
     }
     
 }

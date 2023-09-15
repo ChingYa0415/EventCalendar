@@ -13,45 +13,27 @@ struct MainView: View {
     // MARK: - Property Wrapper
     
     @Environment(\.managedObjectContext) private var viewContext
-    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Event.startDate, ascending: true)]) private var m_events: FetchedResults<Event>
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Event.startDate, ascending: true)]) 
+    private var m_events: FetchedResults<Event>
     @State var m_bIsNewEventPresented: Bool
-    @State var m_bIsAlertPresented: Bool
-    
-    // MARK: - Property
-    
-    let itemFormatter: DateFormatter = {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy/MM/dd"
-        
-        return dateFormatter
-    }()
+    @State var m_bIsDeleteAllAlertPresented: Bool
+    @State var m_bIsHelpAlertPresented: Bool
     
     // MARK: - Body
     
     var body: some View {
         NavigationView {
             List {
-                ForEach(m_events, id: \.self) { event in
-                    NavigationLink {
-                        EventCalendarView(m_event: event)
-                    } label: {
-                        Image(systemName: "calendar")
-                            .imageScale(.large)
-                            .padding()
-                            .background(.pink)
-                            .clipShape(Circle())
+                ForEach(m_events) { event in
+                    ZStack {
+                        MainEventCellView(m_strTitle: event.title!, m_dateStart: event.startDate!, m_strElapsedTime: setElapsedTime(event.startDate!))
                         
-                        Text(event.startDate!, formatter: itemFormatter)
-                            .padding(.leading, 20)
-                            .foregroundStyle(.green)
-                            .font(.subheadline)
-                        
-                        Text("\(event.title!)")
-                            .bold()
-                            .padding(.leading, 20)
-                            .foregroundStyle(.green)
-                            .font(.subheadline)
-                            .lineLimit(2)
+                        NavigationLink {
+                            EventCalendarView(m_event: event)
+                        } label: {
+                            EmptyView()
+                        }
+                        .opacity(0)
                     }
                 }
                 .onDelete(perform: deleteItems)
@@ -61,11 +43,20 @@ struct MainView: View {
                 ToolbarItemGroup(placement: .topBarTrailing) {
                     if !m_events.isEmpty {
                         Button {
-                            m_bIsAlertPresented = true
+                            m_bIsDeleteAllAlertPresented = true
                         } label: {
                             Text("全部刪除")
                                 .underline()
                                 .foregroundStyle(.red)
+                        }
+                        
+                        Spacer()
+                        
+                        Button {
+                            m_bIsHelpAlertPresented = true
+                        } label: {
+                            Image(systemName: "questionmark.circle")
+                                .foregroundStyle(.black)
                         }
                     }
                     
@@ -82,10 +73,8 @@ struct MainView: View {
             .sheet(isPresented: $m_bIsNewEventPresented) {
                 NewEventView()
             }
-            .alert("全部刪除", isPresented: $m_bIsAlertPresented) {
-                Button("取消", role: .cancel) {
-                    m_bIsAlertPresented = false
-                }
+            .alert("全部刪除", isPresented: $m_bIsDeleteAllAlertPresented) {
+                Text("取消")
                 
                 Button("確定", role: .destructive) {
                     withAnimation {
@@ -103,7 +92,18 @@ struct MainView: View {
             } message: {
                 Text("確定要刪除全部資料嗎？")
             }
+            .alert("", isPresented: $m_bIsHelpAlertPresented) {
+                Text("好")
+            } message: {
+                Text("經過日期以天為單位來進行計算")
+            }
             .refreshable {
+                do {
+                    try await Task.sleep(nanoseconds: 1 * 1000000000)
+                } catch {
+                    print(error)
+                }
+                
                 viewContext.refreshAllObjects()
             }
         }
@@ -134,7 +134,7 @@ struct MainView: View {
 struct MainView_Previews: PreviewProvider {
     
     static var previews: some View {
-        MainView(m_bIsNewEventPresented: false, m_bIsAlertPresented: false)
+        MainView(m_bIsNewEventPresented: false, m_bIsDeleteAllAlertPresented: false, m_bIsHelpAlertPresented: false)
             .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
     
