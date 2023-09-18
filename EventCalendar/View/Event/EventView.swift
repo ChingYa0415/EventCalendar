@@ -191,7 +191,7 @@ struct EventView: View {
         fetchRequest.predicate = NSPredicate(format: "event == %@", m_event.objectID)
         
         do {
-            if let m_eventContents = try? viewContext.fetch(fetchRequest) as [EventContent] {
+            if (try? viewContext.fetch(fetchRequest) as [EventContent]) != nil {
                 return true
             } else {
                 return false
