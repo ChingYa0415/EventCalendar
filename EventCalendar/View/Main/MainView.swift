@@ -12,6 +12,7 @@ struct MainView: View {
     
     // MARK: - Property Wrapper
     
+    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.managedObjectContext) private var viewContext
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Event.startDate, ascending: true)]) private var m_events: FetchedResults<Event>
     @State var m_bIsNewEventPresented: Bool
@@ -56,7 +57,7 @@ struct MainView: View {
                                 m_bIsHelpAlertPresented = true
                             } label: {
                                 Image(systemName: "info.circle")
-                                    .foregroundStyle(.black)
+                                    .foregroundStyle(colorScheme == .light ? .black : .white)
                             }
                         }
                     }
