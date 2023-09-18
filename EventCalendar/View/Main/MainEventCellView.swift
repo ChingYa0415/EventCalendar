@@ -11,9 +11,7 @@ struct MainEventCellView: View {
     
     // MARK: - Property Wrapper
     
-    @State var m_strTitle: String
-    @State var m_dateStart: Date
-    @State var m_strElapsedTime: String
+    @ObservedObject var m_event: Event
     
     // MARK: - Body
     
@@ -26,14 +24,14 @@ struct MainEventCellView: View {
                     .foregroundStyle(.pink)
                 
                 VStack(alignment: .leading, spacing: 8) {
-                    Text(m_strTitle)
+                    Text(m_event.title ?? "")
                         .bold()
                         .foregroundStyle(.green)
                         .font(.title2)
                         .fontDesign(.monospaced)
                         .lineLimit(1)
                     
-                    Text(m_dateStart, formatter: itemFormatter)
+                    Text(m_event.startDate ?? Date(), formatter: itemFormatter)
                         .font(.subheadline)
                         .fontDesign(.monospaced)
                 }
@@ -47,7 +45,7 @@ struct MainEventCellView: View {
             HStack {
                 Spacer()
                 
-                Text(m_strElapsedTime)
+                Text(setElapsedTime(m_event.startDate ?? Date()))
                     .font(.title)
                     .fontDesign(.monospaced)
             }
@@ -62,7 +60,9 @@ struct MainEventCellView: View {
 struct MainEventCellView_Previews: PreviewProvider {
     
     static var previews: some View {
-        MainEventCellView(m_strTitle: "牙套", m_dateStart: Date(), m_strElapsedTime: "365天")
+        let testEventData = PersistenceController.testEventData![0]
+        
+        MainEventCellView(m_event: testEventData)
     }
     
 }

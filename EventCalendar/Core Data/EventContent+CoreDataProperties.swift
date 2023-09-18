@@ -18,9 +18,9 @@ extension EventContent {
 
     @NSManaged public var id: UUID?
     @NSManaged public var content: String
-    @NSManaged public var image: Data?
-    @NSManaged public var date: Date?
-    @NSManaged public var event: Event?
+    @NSManaged public var image: Data
+    @NSManaged public var date: Date
+    @NSManaged public var event: Event
 
 }
 

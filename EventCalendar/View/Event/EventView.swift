@@ -34,7 +34,7 @@ struct EventView: View {
     
     var body: some View {
         HStack(alignment: .center, spacing: 10) {
-            if m_eventContent.image == nil {
+            if m_eventContent.image.isEmpty {
                 Button {
                     m_bIsAddingImage = true
                 } label: {
@@ -74,9 +74,15 @@ struct EventView: View {
                 m_enumPhotoSource = .photoLibrary
             }
             
-            if m_eventContent.image != nil {
+            if !m_eventContent.image.isEmpty {
                 Button("刪除", role: .destructive) {
                     m_eventContent.image = Data()
+                    
+                    if m_eventContent.content.isEmpty && m_eventContent.image.isEmpty && m_eventContent.id != nil {
+                        deleteEventContent(m_eventContent.id!)
+                    } else {
+                        addOrEditEventContent()
+                    }
                 }
             }
         }
@@ -90,8 +96,8 @@ struct EventView: View {
         }
         
         VStack(alignment: .leading, spacing: 10) {
-            if m_eventContent.image != nil {
-                Image(uiImage: UIImage(data: m_eventContent.image ?? Data()) ?? UIImage())
+            if !m_eventContent.image.isEmpty {
+                Image(uiImage: UIImage(data: m_eventContent.image) ?? UIImage())
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .clipShape(RoundedRectangle(cornerRadius: 20))
@@ -99,17 +105,6 @@ struct EventView: View {
                     .frame(maxWidth: .infinity)
                     .onTapGesture {
                         m_bIsAddingImage = true
-                    }
-                    .onChange(of: m_eventContent.image) { newValue in
-                        if m_bIsAddingImage {
-                            if m_eventContent.content.isEmpty && m_eventContent.image == nil {
-                                deleteEventContent(m_eventContent.id!)
-                            } else {
-                                addOrEditEventContent()
-                            }
-                        } else {
-                            deleteEventContent(m_eventContent.id!)
-                        }
                     }
             }
             
@@ -128,7 +123,7 @@ struct EventView: View {
                     .focused($m_bIsEditing)
                     .onChange(of: m_eventContent.content) { newValue in
                         if m_bIsAddingContent {
-                            if m_eventContent.content.isEmpty && m_eventContent.image == nil {
+                            if m_eventContent.content.isEmpty && m_eventContent.image.isEmpty && m_eventContent.id != nil {
                                 deleteEventContent(m_eventContent.id!)
                             } else {
                                 addOrEditEventContent()
@@ -190,6 +185,21 @@ struct EventView: View {
             fatalError("刪除錯誤\(nsError), \(nsError.userInfo)")
         }
     }
+    
+    func checkEventContentsExist() -> Bool {
+        let fetchRequest = EventContent.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "event == %@", m_event.objectID)
+        
+        do {
+            if let m_eventContents = try? viewContext.fetch(fetchRequest) as [EventContent] {
+                return true
+            } else {
+                return false
+            }
+        }
+    }
+    
+    
     
 }
 

@@ -155,7 +155,9 @@ struct CalendarView: View {
     func haveContent(dateValue: DateValue) -> Bool {
         if dateValue.day != -1 {
             for eventContent in m_eventContents {
-                if currentCalendar().isDate(dateValue.date, inSameDayAs: eventContent.date!) {
+                if currentCalendar().isDate(dateValue.date, inSameDayAs: eventContent.date) {
+//                    print("event content: ", eventContent)
+                    
                     return true
                 }
             }

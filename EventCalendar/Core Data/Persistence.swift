@@ -26,8 +26,7 @@ struct PersistenceController {
         eventContent.id = UUID()
         eventContent.content = ""
         eventContent.date = Date()
-//        eventContent.image = UIImage(named: "玫瑰花")?.jpegData(compressionQuality: 1.0)
-        eventContent.image = nil
+        eventContent.image = Data()
         
         do {
             try viewContext.save()

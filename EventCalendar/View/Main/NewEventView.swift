@@ -22,7 +22,7 @@ struct NewEventView: View {
     @Environment(\.dismiss) var dismiss
     @FocusState var m_bIsTitleEditing: Bool
     @FocusState var m_bIsContentEditing: Bool
-    @State var m_uuidID: UUID?
+    @State var m_uuidID: UUID = UUID()
     @State var m_enumType: NewType = .Add
     @State var m_strTitle: String = ""
     @State var m_bHasEndDay: Bool = false
@@ -158,12 +158,16 @@ struct NewEventView: View {
     
     private func editItem() {
         let fetchRequest = Event.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "id == %@", m_uuidID! as CVarArg)
+        fetchRequest.predicate = NSPredicate(format: "id == %@", m_uuidID as CVarArg)
         
         do {
             if let eventToUpdate = try? viewContext.fetch(fetchRequest).first {
                 eventToUpdate.title = m_strTitle
-                eventToUpdate.endDate = m_dateEnd
+                
+                if m_bHasEndDay {
+                    eventToUpdate.endDate = m_dateEnd
+                }
+                
                 eventToUpdate.startDate = m_dateStart
                 eventToUpdate.content = m_strContent
                 
@@ -185,7 +189,7 @@ struct NewEventView: View {
 struct NewEventView_Previews: PreviewProvider {
     
     static var previews: some View {
-        NewEventView(m_strTitle: "", m_dateStart: Date(), m_dateEnd: Date().addingTimeInterval(3600), m_strContent: "")
+        NewEventView(m_uuidID: UUID(), m_strTitle: "", m_dateStart: Date(), m_dateEnd: Date().addingTimeInterval(3600), m_strContent: "")
     }
     
 }

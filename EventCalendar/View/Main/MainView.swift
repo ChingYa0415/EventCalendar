@@ -13,8 +13,7 @@ struct MainView: View {
     // MARK: - Property Wrapper
     
     @Environment(\.managedObjectContext) private var viewContext
-    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Event.startDate, ascending: true)])
-    private var m_events: FetchedResults<Event>
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Event.startDate, ascending: true)]) private var m_events: FetchedResults<Event>
     @State var m_bIsNewEventPresented: Bool
     @State var m_bIsDeleteAllAlertPresented: Bool
     @State var m_bIsHelpAlertPresented: Bool
@@ -27,7 +26,7 @@ struct MainView: View {
                 List {
                     ForEach(m_events) { event in
                         ZStack {
-                            MainEventCellView(m_strTitle: event.title!, m_dateStart: event.startDate!, m_strElapsedTime: setElapsedTime(event.startDate!))
+                            MainEventCellView(m_event: event)
                             
                             NavigationLink {
                                 EventCalendarView(m_event: event)
@@ -98,6 +97,9 @@ struct MainView: View {
                         print(error)
                     }
                 }
+                .onAppear {
+                    viewContext.refreshAllObjects()
+                }
                 
                 Button {
                     m_bIsNewEventPresented = true
@@ -125,8 +127,6 @@ struct MainView: View {
             do {
                 try viewContext.save()
             } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
                 let nsError = error as NSError
                 
                 fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
