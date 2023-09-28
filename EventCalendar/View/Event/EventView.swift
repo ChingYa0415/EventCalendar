@@ -41,7 +41,8 @@ struct EventView: View {
                     Text("新增今日圖片")
                         .font(.subheadline)
                         .foregroundStyle(.white)
-                        .frame(maxWidth: .infinity, maxHeight: 40, alignment: .center)
+                        .frame(height: 40)
+                        .frame(maxWidth: .infinity, alignment: .center)
                         .background(.pink)
                         .clipShape(RoundedRectangle(cornerRadius: 10))
                         .padding(.vertical, 10)
@@ -56,7 +57,8 @@ struct EventView: View {
                     Text("新增今日備註")
                         .font(.subheadline)
                         .foregroundStyle(.white)
-                        .frame(maxWidth: .infinity, maxHeight: 40, alignment: .center)
+                        .frame(height: 40)
+                        .frame(maxWidth: .infinity, alignment: .center)
                         .background(.pink)
                         .clipShape(RoundedRectangle(cornerRadius: 10))
                         .padding(.vertical, 10)
@@ -64,7 +66,6 @@ struct EventView: View {
                 .tint(.clear)
             }
         }
-        .padding()
         .confirmationDialog("選擇圖片來源", isPresented: $m_bIsAddingImage, titleVisibility: .visible) {
             Button("相機", role: .none) {
                 m_enumPhotoSource = .camera
@@ -198,8 +199,6 @@ struct EventView: View {
             }
         }
     }
-    
-    
     
 }
 

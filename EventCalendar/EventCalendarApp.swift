@@ -11,6 +11,7 @@ import SwiftUI
 struct EventCalendarApp: App {
     
     let persistenceController = PersistenceController.shared
+    let testEventContentData = PersistenceController.testEventData!
     
     var body: some Scene {
         WindowGroup {

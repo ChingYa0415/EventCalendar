@@ -30,14 +30,14 @@ struct EventCalendarView: View {
                         .font(.callout)
                         .fontWeight(.light)
                 }
-                .frame(maxWidth: .infinity, idealHeight: 300, alignment: .leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 20)
                 
                 CalendarView(m_eventContents: getEventContents(), m_dateStart: $m_event.startDate, m_dateEnd: $m_event.endDate, m_dateCurrent: $m_dateCurrent)
                 
                 EventView(m_bIsEditing: _m_bIsEditing, m_eventContent: getCurrentEventContent(), m_event: m_event, m_dateCurrent: $m_dateCurrent)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         }
         .navigationTitle("事件詳細資訊")
         .navigationBarTitleDisplayMode(.inline)
@@ -121,6 +121,7 @@ struct EventCalendarView_Previews: PreviewProvider {
         let testEventData = PersistenceController.testEventData![0]
         
         EventCalendarView(m_event: testEventData)
+            .environment(\.managedObjectContext, PersistenceController.shared.container.viewContext)
     }
     
 }

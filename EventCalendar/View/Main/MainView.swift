@@ -10,14 +10,38 @@ import CoreData
 
 struct MainView: View {
     
+    // MARK: - Enumeration
+    
+    enum EventSort: CaseIterable {
+        case startDate
+        case title
+        
+        var id: Self {
+            self
+        }
+        
+        var keyPath: String {
+            switch self {
+            case .startDate:
+                return "startDate"
+            case .title:
+                return "title"
+            }
+        }
+    }
+    
     // MARK: - Property Wrapper
     
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.managedObjectContext) private var viewContext
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Event.startDate, ascending: true)]) private var m_events: FetchedResults<Event>
+//    @FetchRequest var m_events: FetchedResults<Event>
+//    @State var m_events: [Event]
     @State var m_bIsNewEventPresented: Bool
     @State var m_bIsDeleteAllAlertPresented: Bool
     @State var m_bIsHelpAlertPresented: Bool
+    @State var m_enumEventSort: EventSort = .startDate
+    @State var m_bSortIncreasing: Bool = true
     
     // MARK: - Body
     
@@ -59,6 +83,21 @@ struct MainView: View {
                                 Image(systemName: "info.circle")
                                     .foregroundStyle(colorScheme == .light ? .black : .white)
                             }
+                            
+                            Menu {
+                                Menu("排序方式") {
+                                    Picker(selection: $m_enumEventSort) {
+                                        Text("時間").tag(EventSort.startDate)
+                                        
+                                        Text("名稱").tag(EventSort.title)
+                                    } label: {
+                                        Text("排序方式")
+                                    }
+                                }
+                            } label: {
+                                Image(systemName: "list.bullet")
+                                    .foregroundStyle(colorScheme == .light ? .black : .white)
+                            }
                         }
                     }
                 }
@@ -66,8 +105,6 @@ struct MainView: View {
                     NewEventView()
                 }
                 .alert("全部刪除", isPresented: $m_bIsDeleteAllAlertPresented) {
-                    Text("取消")
-                    
                     Button("確定", role: .destructive) {
                         withAnimation {
                             do {
@@ -85,7 +122,9 @@ struct MainView: View {
                     Text("確定要刪除全部資料嗎？")
                 }
                 .alert("", isPresented: $m_bIsHelpAlertPresented) {
-                    Text("好")
+                    Button("好") {
+                        
+                    }
                 } message: {
                     Text("經過日期以天為單位來進行計算")
                 }
@@ -99,7 +138,7 @@ struct MainView: View {
                     }
                 }
                 .onAppear {
-                    viewContext.refreshAllObjects()
+//                    getEvents()
                 }
                 
                 Button {
@@ -110,7 +149,6 @@ struct MainView: View {
                         .foregroundStyle(.green)
                         .frame(width: 60, height: 60)
                         .background(in: RoundedRectangle(cornerSize: CGSize(width: 30, height: 30)))
-                    
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
                 .tint(.clear)
@@ -135,6 +173,22 @@ struct MainView: View {
         }
     }
     
+//    func getEvents(_ keyPath: String = "startDate") {
+//        // title
+//        // startDate
+//        
+//        let fetchRequest = Event.fetchRequest()
+//        fetchRequest.sortDescriptors = [NSSortDescriptor(key: keyPath, ascending: true)]
+//        
+//        do {
+//            m_events = try viewContext.fetch(fetchRequest)
+//        } catch {
+//            let nsError = error as NSError
+//            
+//            fatalError("編輯錯誤\(nsError), \(nsError.userInfo)")
+//        }
+//    }
+    
 }
 
 // MARK: - Preview
@@ -142,6 +196,8 @@ struct MainView: View {
 struct MainView_Previews: PreviewProvider {
     
     static var previews: some View {
+        let testEventContentData = PersistenceController.testEventData!
+        
         MainView(m_bIsNewEventPresented: false, m_bIsDeleteAllAlertPresented: false, m_bIsHelpAlertPresented: false)
             .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }

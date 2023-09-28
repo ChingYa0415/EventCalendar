@@ -127,32 +127,30 @@ struct NewEventView: View {
     // MARK: - Method
     
     private func addItem() {
-        withAnimation {
-            let event = Event(context: viewContext)
-            event.id = UUID()
+        let event = Event(context: viewContext)
+        event.id = UUID()
+        
+        if m_strTitle.isEmpty {
+            m_strTitle = "新增事件"
+        }
+        
+        if m_strContent.isEmpty {
+            m_strContent = "新增事件內容"
+        }
+        
+        event.title = m_strTitle
+        event.startDate = dateToDay(m_dateStart)
+        event.endDate = m_bHasEndDay ? dateToDay(m_dateEnd) : nil
+        event.content = m_strContent
+        
+        do {
+            try viewContext.save()
             
-            if m_strTitle.isEmpty {
-                m_strTitle = "新增事件"
-            }
+            dismiss()
+        } catch {
+            let nsError = error as NSError
             
-            if m_strContent.isEmpty {
-                m_strContent = "新增事件內容"
-            }
-            
-            event.title = m_strTitle
-            event.startDate = dateToDay(m_dateStart)
-            event.endDate = m_bHasEndDay ? dateToDay(m_dateEnd) : nil
-            event.content = m_strContent
-            
-            do {
-                try viewContext.save()
-                
-                dismiss()
-            } catch {
-                let nsError = error as NSError
-                
-                fatalError("新增錯誤\(nsError), \(nsError.userInfo)")
-            }
+            fatalError("新增錯誤\(nsError), \(nsError.userInfo)")
         }
     }
     

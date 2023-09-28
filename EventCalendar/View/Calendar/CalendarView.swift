@@ -139,7 +139,7 @@ struct CalendarView: View {
         .onChange(of: m_iCurrentMonth) { newValue in
             m_dateCurrent = getCurrentMonth()
         }
-        .animation(nil)
+        .animation(nil, value: m_iCurrentMonth)
     }
     
     // MARK: - Method
