@@ -145,11 +145,11 @@ struct CalendarView: View {
     // MARK: - Method
     
     func isSameDay(dateValue: DateValue, currentDate: Date) -> Bool {
-        return dateValue.day != -1 ? currentCalendar().isDate(dateValue.date, inSameDayAs: currentDate) : false
+        dateValue.day != -1 ? currentCalendar().isDate(dateValue.date, inSameDayAs: currentDate) : false
     }
     
     func isSameDay(date1: Date, date2: Date) -> Bool {
-        return currentCalendar().isDate(date1, inSameDayAs: date2)
+        currentCalendar().isDate(date1, inSameDayAs: date2)
     }
     
     func haveContent(dateValue: DateValue) -> Bool {
