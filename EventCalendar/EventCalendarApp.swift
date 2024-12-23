@@ -9,12 +9,16 @@ import SwiftUI
 
 @main
 struct EventCalendarApp: App {
+    
     let persistenceController = PersistenceController.shared
-
+    let testEventContentData = PersistenceController.testEventData!
+    
     var body: some Scene {
         WindowGroup {
-            MainView()
+            MainView(m_bIsNewEventPresented: false, m_bIsDeleteAllAlertPresented: false, m_bIsHelpAlertPresented: false)
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .environment(\.locale, Locale(identifier: "zh_Hant_TW"))
         }
     }
+    
 }

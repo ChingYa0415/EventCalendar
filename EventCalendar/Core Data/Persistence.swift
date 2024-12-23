@@ -5,6 +5,7 @@
 //  Created by Angus on 2023/7/19.
 //
 
+import SwiftUI
 import CoreData
 
 struct PersistenceController {
@@ -14,10 +15,18 @@ struct PersistenceController {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
         
-        for _ in 0..<1 {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
-        }
+        let event = Event(context: viewContext)
+        event.id = UUID()
+        event.title = "測試主題"
+        event.startDate = Date()
+        event.endDate = Date(timeInterval: 3600, since: Date())
+        event.content = "測試內容"
+        
+        let eventContent = EventContent(context: viewContext)
+        eventContent.id = UUID()
+        eventContent.content = ""
+        eventContent.date = Date()
+        eventContent.image = Data()
         
         do {
             try viewContext.save()
@@ -60,5 +69,13 @@ struct PersistenceController {
         
         container.viewContext.automaticallyMergesChangesFromParent = true
     }
+    
+    static var testEventData: [Event]? = {
+        return try? PersistenceController.preview.container.viewContext.fetch(NSFetchRequest<NSFetchRequestResult>(entityName: "Event")) as? [Event]
+    }()
+    
+    static var testEventContentData: [EventContent]? = {
+        return try? PersistenceController.preview.container.viewContext.fetch(NSFetchRequest<NSFetchRequestResult>(entityName: "EventContent")) as? [EventContent]
+    }()
     
 }

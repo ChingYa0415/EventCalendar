@@ -7,6 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		183783D22AA9B0C800F16636 /* EventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 183783D12AA9B0C800F16636 /* EventView.swift */; };
+		1857E46A2A820E6D00B65B1E /* DateValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1857E4692A820E6D00B65B1E /* DateValue.swift */; };
+		185D2B462AAAE9F1005572C7 /* Event+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185D2B422AAAE9F1005572C7 /* Event+CoreDataProperties.swift */; };
+		185D2B472AAAE9F1005572C7 /* EventContent+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185D2B432AAAE9F1005572C7 /* EventContent+CoreDataClass.swift */; };
+		185D2B482AAAE9F1005572C7 /* Event+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185D2B442AAAE9F1005572C7 /* Event+CoreDataClass.swift */; };
+		185D2B492AAAE9F1005572C7 /* EventContent+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185D2B452AAAE9F1005572C7 /* EventContent+CoreDataProperties.swift */; };
+		18AE7D6D2AAC6AC700CE5793 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AE7D6C2AAC6AC700CE5793 /* DateExtension.swift */; };
+		18BAA8472AB41E6B00275B9A /* MainEventCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18BAA8462AB41E6B00275B9A /* MainEventCellView.swift */; };
+		18C3D8F82AA9CEB6006C0BDD /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C3D8F72AA9CEB6006C0BDD /* ImagePicker.swift */; };
+		18F0B5F92A8F282D009D854B /* NewEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F0B5F82A8F282D009D854B /* NewEventView.swift */; };
+		24660B702A6AAB150046EFEB /* EventCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24660B6F2A6AAB150046EFEB /* EventCalendarView.swift */; };
+		24660B722A6AAB6A0046EFEB /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24660B712A6AAB6A0046EFEB /* CalendarView.swift */; };
 		24F4217B2A67C19800A4935A /* EventCalendarApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F4217A2A67C19800A4935A /* EventCalendarApp.swift */; };
 		24F4217D2A67C19800A4935A /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F4217C2A67C19800A4935A /* MainView.swift */; };
 		24F4217F2A67C19A00A4935A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24F4217E2A67C19A00A4935A /* Assets.xcassets */; };
@@ -16,6 +28,18 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		183783D12AA9B0C800F16636 /* EventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventView.swift; sourceTree = "<group>"; };
+		1857E4692A820E6D00B65B1E /* DateValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateValue.swift; sourceTree = "<group>"; };
+		185D2B422AAAE9F1005572C7 /* Event+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Event+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		185D2B432AAAE9F1005572C7 /* EventContent+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "EventContent+CoreDataClass.swift"; sourceTree = "<group>"; };
+		185D2B442AAAE9F1005572C7 /* Event+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Event+CoreDataClass.swift"; sourceTree = "<group>"; };
+		185D2B452AAAE9F1005572C7 /* EventContent+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "EventContent+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		18AE7D6C2AAC6AC700CE5793 /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
+		18BAA8462AB41E6B00275B9A /* MainEventCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainEventCellView.swift; sourceTree = "<group>"; };
+		18C3D8F72AA9CEB6006C0BDD /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		18F0B5F82A8F282D009D854B /* NewEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEventView.swift; sourceTree = "<group>"; };
+		24660B6F2A6AAB150046EFEB /* EventCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCalendarView.swift; sourceTree = "<group>"; };
+		24660B712A6AAB6A0046EFEB /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		24F421772A67C19800A4935A /* EventCalendar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EventCalendar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		24F4217A2A67C19800A4935A /* EventCalendarApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCalendarApp.swift; sourceTree = "<group>"; };
 		24F4217C2A67C19800A4935A /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
@@ -36,6 +60,58 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		183783D02AA9B0B500F16636 /* Event */ = {
+			isa = PBXGroup;
+			children = (
+				183783D12AA9B0C800F16636 /* EventView.swift */,
+			);
+			path = Event;
+			sourceTree = "<group>";
+		};
+		18C3D8F62AA9CE9E006C0BDD /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				18C3D8F72AA9CEB6006C0BDD /* ImagePicker.swift */,
+				18AE7D6C2AAC6AC700CE5793 /* DateExtension.swift */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
+		24660B622A6AA6570046EFEB /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				1857E4692A820E6D00B65B1E /* DateValue.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		24660B632A6AA65E0046EFEB /* View */ = {
+			isa = PBXGroup;
+			children = (
+				24F4218D2A67CF0300A4935A /* Main */,
+				24660B6C2A6AAAD00046EFEB /* EventCalendar */,
+				24660B6D2A6AAAE50046EFEB /* Calendar */,
+				183783D02AA9B0B500F16636 /* Event */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		24660B6C2A6AAAD00046EFEB /* EventCalendar */ = {
+			isa = PBXGroup;
+			children = (
+				24660B6F2A6AAB150046EFEB /* EventCalendarView.swift */,
+			);
+			path = EventCalendar;
+			sourceTree = "<group>";
+		};
+		24660B6D2A6AAAE50046EFEB /* Calendar */ = {
+			isa = PBXGroup;
+			children = (
+				24660B712A6AAB6A0046EFEB /* CalendarView.swift */,
+			);
+			path = Calendar;
+			sourceTree = "<group>";
+		};
 		24F4216E2A67C19800A4935A = {
 			isa = PBXGroup;
 			children = (
@@ -56,7 +132,9 @@
 			isa = PBXGroup;
 			children = (
 				24F4217A2A67C19800A4935A /* EventCalendarApp.swift */,
-				24F4218D2A67CF0300A4935A /* Main */,
+				24660B622A6AA6570046EFEB /* Model */,
+				24660B632A6AA65E0046EFEB /* View */,
+				18C3D8F62AA9CE9E006C0BDD /* Helper */,
 				24F4217E2A67C19A00A4935A /* Assets.xcassets */,
 				24F4218F2A67CF2F00A4935A /* Core Data */,
 				24F421802A67C19A00A4935A /* Preview Content */,
@@ -76,6 +154,8 @@
 			isa = PBXGroup;
 			children = (
 				24F4217C2A67C19800A4935A /* MainView.swift */,
+				18F0B5F82A8F282D009D854B /* NewEventView.swift */,
+				18BAA8462AB41E6B00275B9A /* MainEventCellView.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -83,6 +163,10 @@
 		24F4218F2A67CF2F00A4935A /* Core Data */ = {
 			isa = PBXGroup;
 			children = (
+				185D2B442AAAE9F1005572C7 /* Event+CoreDataClass.swift */,
+				185D2B422AAAE9F1005572C7 /* Event+CoreDataProperties.swift */,
+				185D2B432AAAE9F1005572C7 /* EventContent+CoreDataClass.swift */,
+				185D2B452AAAE9F1005572C7 /* EventContent+CoreDataProperties.swift */,
 				24F421832A67C19A00A4935A /* Persistence.swift */,
 				24F421852A67C19A00A4935A /* EventCalendar.xcdatamodeld */,
 			);
@@ -159,9 +243,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				185D2B472AAAE9F1005572C7 /* EventContent+CoreDataClass.swift in Sources */,
+				18AE7D6D2AAC6AC700CE5793 /* DateExtension.swift in Sources */,
+				185D2B462AAAE9F1005572C7 /* Event+CoreDataProperties.swift in Sources */,
 				24F421842A67C19A00A4935A /* Persistence.swift in Sources */,
+				18BAA8472AB41E6B00275B9A /* MainEventCellView.swift in Sources */,
 				24F4217D2A67C19800A4935A /* MainView.swift in Sources */,
+				24660B722A6AAB6A0046EFEB /* CalendarView.swift in Sources */,
+				183783D22AA9B0C800F16636 /* EventView.swift in Sources */,
+				185D2B492AAAE9F1005572C7 /* EventContent+CoreDataProperties.swift in Sources */,
 				24F421872A67C19A00A4935A /* EventCalendar.xcdatamodeld in Sources */,
+				185D2B482AAAE9F1005572C7 /* Event+CoreDataClass.swift in Sources */,
+				18F0B5F92A8F282D009D854B /* NewEventView.swift in Sources */,
+				24660B702A6AAB150046EFEB /* EventCalendarView.swift in Sources */,
+				18C3D8F82AA9CEB6006C0BDD /* ImagePicker.swift in Sources */,
+				1857E46A2A820E6D00B65B1E /* DateValue.swift in Sources */,
 				24F4217B2A67C19800A4935A /* EventCalendarApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -221,7 +317,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -278,7 +374,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -293,27 +389,35 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"EventCalendar/Preview Content\"";
 				DEVELOPMENT_TEAM = M2C365PDF2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "你需要允許EventCalendat使用你的相機。";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "你需要允許EventCalendat使用你的照片。";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.angus.EventCalendar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -322,27 +426,35 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"EventCalendar/Preview Content\"";
 				DEVELOPMENT_TEAM = M2C365PDF2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "你需要允許EventCalendat使用你的相機。";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "你需要允許EventCalendat使用你的照片。";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.angus.EventCalendar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
